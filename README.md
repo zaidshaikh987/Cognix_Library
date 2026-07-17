@@ -1,19 +1,24 @@
 # Cognix_Library
 
-[![Website](https://img.shields.io/badge/Website-cognix--framework.preview.emergentagent.com-blue?style=for-the-badge)](https://cognix-framework.preview.emergentagent.com/)
+> [!IMPORTANT]
+> **Disclaimer:** The websites linked below are provided solely for **demonstration and clarity** to help visualize the framework and research. They are interactive previews and are not the main official websites for the project.
+
+[![Website Preview](https://img.shields.io/badge/Website_Preview-cognix--framework.preview.emergentagent.com-blue?style=for-the-badge)](https://cognix-framework.preview.emergentagent.com/)
 [![Research Dashboard](https://img.shields.io/badge/Research_Dashboard-cognixresearchhaven.netlify.app-purple?style=for-the-badge)](https://cognixresearchhaven.netlify.app/)
 
 A comprehensive research intelligence dashboard for the Cognix Bayesian Multi-Agent Decision System.
 
+---
+
+### 🌐 The Cognix Framework (Demonstration)
+**🔗 [Visit the Cognix Framework Preview](https://cognix-framework.preview.emergentagent.com/)**
+
+Explore the documentation and framework integrations through our beautifully crafted demonstration site. Experience the modular architecture and capabilities of the Cognix framework in a clean, accessible layout.
+
 ### 📊 Research Intelligence Dashboard
-**[https://cognixresearchhaven.netlify.app/](https://cognixresearchhaven.netlify.app/)**
+**🔗 [Visit the Research Dashboard](https://cognixresearchhaven.netlify.app/)**
 
 Explore the intellectual foundation of Cognix. This interactive dashboard compiles the key findings, visual architectures, and critical insights from over 35+ foundational research papers into one comprehensive view.
-
-### 🌐 Official Website
-**[https://cognix-framework.preview.emergentagent.com/](https://cognix-framework.preview.emergentagent.com/)**
-
-Explore the documentation and framework integrations.
 
 ## 🚀 Key Blueprint & Direction
 
