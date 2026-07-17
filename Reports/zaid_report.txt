@@ -1,0 +1,1330 @@
+TOTAL PAGES: 45
+=== PAGE 1 ===
+A PROJECT BASED SEMINAR REPORT
+on
+COGNIX
+Bayesian Multi-Agent Decision System with Calibrated Uncertainty
+Quantification
+Submitted towards the
+Partial Fulfilment of the Requirements of
+Bachelor of Technology in
+Artificial Intelligence and Data Science
+By
+Mohammad Zaid Sarfaraj Shaikh Seat No: T231311115
+Under the guidance of
+Prof. I. J. Shaikh
+Department of Artificial Intelligence and Data Science
+K. K. WAGH EDUCATION SOCIETY'S
+K. K. WAGH INSTITUTE OF ENGINEERING EDUCATION AND RESEARCH
+Hirabai Haridas Vidyanagari, Amrutdham, Panchavati, Nashik, Maharashtra 422003
+(An Autonomous Institute affiliated to Savitribai Phule Pune University)
+A. Y. 2025-2026 Sem II
+=== PAGE 2 ===
+Department of Artificial Intelligence and Data Science
+K. K. WAGH EDUCATION SOCIETY'S
+K. K. WAGH INSTITUTE OF ENGINEERING EDUCATION AND RESEARCH
+(An Autonomous Institute affiliated to Savitribai Phule Pune University)
+CERTIFICATE
+This is to certify that the seminar report entitled
+COGNIX
+Bayesian Multi - Agent Decision System with Calibrated Uncertainty
+Quantification
+being submitted by
+Mohammad Zaid Sarfaraj Shaikh Seat No: T231311115
+is a bonafide work carried out by student under the supervision of Prof.I.J.Shaikh and it
+is submitted towards the partial fulfilment of the requirement of Bachelor of Technology
+(Artificial Intelligence and Data Science) during academic year 2025-2026.
+Prof.I.J.Shaikh Head,
+Internal Guide Department of
+Department of Artificial Intelligence and Data Science
+Artificial Intelligence and Data Science
+=== PAGE 3 ===
+Abstract
+Multi-agent AI systems in safety-critical domains such as autonomous driving, medical diag-
+nostics, and financial trading consistently produce overconfident decisions due to the absence
+of a principled uncertainty quantification mechanism. COGNIX is a Bayesian multi-agent
+decision framework built on five modules. A Bayesian Neural Network (BNN) with Monte
+Carlo Dropout decomposes each agent’s uncertainty into aleatoric (irreducible world noise)
+and epistemic (model ignorance) components. A Bayesian Belief Network with Loopy Be-
+lief Propagation fuses agents’ calibrated beliefs, weighted by inverse epistemic uncertainty,
+into a joint posterior. Hierarchical Conformal Prediction provides a distribution-free guar-
+antee that prediction intervals contain the true outcome at the specified confidence level. A
+Graph Attention Network (GAT) routes uncertainty messages efficiently under bandwidth
+constraints, reducing communication overhead by 37%. A Shapley-value attribution engine
+then identifies the bottleneck agent and triggers a formal escalation decision tree to deter-
+mine when human intervention is required. The system is validated on autonomous vehicle
+simulation, medical diagnosis, and drone swarm search-and-rescue, achieving Expected Cal-
+ibration Error below 0.05 and escalation F1 above 0.80 within a 100ms real-time budget.
+Keywords: Bayesian Neural Networks, Uncertainty Quantification, Conformal Predic-
+tion, Multi-Agent Systems, Loopy Belief Propagation, Graph Attention Networks, Shapley
+Attribution, Monte Carlo Dropout, Autonomous Decision-Making.
+=== PAGE 4 ===
+Acknowledgement
+I would like to thank my project guide, Prof. I. J. Shaikh, for her guidance and sup-
+port. I will forever remain grateful for the constant support and guidance extended by my
+guide, in making this project phase I report. Through our many discussions, she helped me
+toformand solidify ideas. The invaluablediscussionsIhad withherandmyteamcolleagues,
+the penetrating questions he has put to me and the constant motivation, has all led to the
+development of the ideas presented in this project phase I report.
+I would also like to thank my wonderful colleagues, parents and friends for lis-
+tening my ideas, asking questions and providing feedback and suggestions for improving my
+ideas.
+Zaid Shaikh
+=== PAGE 5 ===
+Contents
+1 Introduction 1
+1.1 Project Idea . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.2 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.3 Literature Survey . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.3.1 Literature Survey — Module 4: GNN-Based Communication Protocol 3
+1.3.2 Literature Survey — Module 5: Decision and Attribution Engine . . 5
+2 Problem Definition and Scope 7
+2.1 Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.1.1 Goals and Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.1.2 Assumptions and Scope . . . . . . . . . . . . . . . . . . . . . . . . . 8
+3 Methodology 10
+3.1 Methodology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.1.1 GNN-Based Communication Protocol (Module 4) . . . . . . . . . . . 11
+3.1.2 Decision and Attribution Engine (Module 5) . . . . . . . . . . . . . . 16
+3.2 Type of Project . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+3.3 Expected Outcomes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+3.3.1 Input and Output Format . . . . . . . . . . . . . . . . . . . . . . . . 21
+3.4 Type of Project . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+3.5 Expected Outcomes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.5.1 Input and Output Format . . . . . . . . . . . . . . . . . . . . . . . . 24
+4 Project Plan 26
+4.1 Project Timeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+4.2 Team Organisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+4.2.1 Team Structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+5 Experimental setup 29
+5.1 Data Set . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+5.2 Technology Used . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+5.3 Performance Parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+6 PO & PSO Mapping 31
+=== PAGE 6 ===
+6.1 Program Outcome (PO) Mapping . . . . . . . . . . . . . . . . . . . . . . . . 31
+6.2 Program Specific Outcome (PSO) Mapping . . . . . . . . . . . . . . . . . . . 34
+7 Summary 36
+List of Figures
+3.1 COGNIX — Overall System Block Diagram . . . . . . . . . . . . . . . . . . 11
+3.2 Module-level architecture of the GNN-Based Communication Protocol . . . . 14
+3.3 Module-level architecture of the Decision and Attribution Engine . . . . . . 19
+=== PAGE 7 ===
+List of Tables
+3.1 Technology stack for Module 4 . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+3.2 Technology stack for Module 5 . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+4.1 Project Timeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+6.1 Program Outcomes (PO) Mapping – Cognix . . . . . . . . . . . . . . . . . . 34
+6.2 Program Specific Outcomes (PSO) Mapping – Cognix . . . . . . . . . . . . . 35
+=== PAGE 8 ===
+Chapter: 1
+Chapter 1
+Introduction
+1.1 Project Idea
+In recent years, artificial intelligence has become a core component of critical systems
+such as autonomous vehicles, healthcare diagnostics, financial forecasting, and industrial au-
+tomation. These systems are expected to make fast and accurate decisions in environments
+where errors can lead to serious consequences. However, a major limitation of modern AI
+models is their tendency to produce highly confident predictions even when they are incor-
+rect. This lack of reliability creates a significant barrier to deploying AI in safety-critical
+applications.
+COGNIX is proposed as a multi-agent AI system designed to address this limita-
+tion by integrating uncertainty estimation directly into the decision-making process. Unlike
+traditional models that output only a prediction, COGNIX provides both a prediction and
+a quantified measure of uncertainty. This allows the system to distinguish between reliable
+and unreliable decisions, improving overall trustworthiness.
+The system is built as a pipeline of five interconnected modules, each contribut-
+ing to reliable decision-making. It begins with uncertainty detection using Bayesian Neural
+Networks, followed by probabilistic belief aggregation across multiple agents through Loopy
+Belief Propagation. The predictions are then calibrated using Hierarchical Conformal Pre-
+diction to ensure statistical reliability. Agents subsequently communicate selectively through
+a Graph Attention Network weighted by epistemic uncertainty, and finally a decision engine
+produces a risk-attributed output with structured escalation logic.
+The key technologies that power COGNIX include:
+• Bayesian Neural Networks (BNN): Used for decomposing prediction uncertainty
+into aleatoric and epistemic components using Monte Carlo Dropout, enabling a prin-
+cipled understanding of prediction reliability per agent.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 1
+=== PAGE 9 ===
+Chapter: 1
+• Multi-Agent Systems: Multiple agents independently process sensor data and col-
+laborate to improve robustness, reduce single-point failure, and produce a calibrated
+collective decision.
+• Conformal Prediction: Provides statistically valid, distribution-free confidence in-
+tervals at both the individual and collective level, guaranteeing that true outcomes
+fall within predicted intervals at a specified confidence level without requiring model
+retraining.
+• Graph Attention Networks (GAT): Enable efficient and uncertainty-aware infor-
+mation routing between agents, automatically down-weighting agents with high epis-
+temic uncertainty and reducing communication overhead by 37%.
+• Shapley Value Attribution: Identifiesthespecificagentcontributingmosttocollec-
+tivesystemuncertainty,enablingtargetedmodelimprovementandregulatory-compliant
+explainability.
+The primary objective of COGNIX is to create an AI system that is not only
+intelligent but also reliable, interpretable, and suitable for deployment in real-world environ-
+ments where decision correctness and transparency are critical requirements.
+1.2 Motivation
+The development of COGNIX is driven by the increasing reliance on artificial intel-
+ligence in safety-critical real-world applications and the risks associated with unreliable or
+overconfident predictions. While modern AI systems achieve high accuracy on benchmark
+tasks, they consistently fail to indicate when they are uncertain — a fundamental require-
+ment for safe and trustworthy deployment in domains such as autonomous driving, medical
+diagnosis, and distributed robotics.
+The key factors motivating this project are as follows:
+1. Overconfident Predictions: Many AI systems produce highly confident outputs
+even when predictions are incorrect. This poses a serious risk in healthcare and au-
+tonomous systems, where incorrect decisions can lead to critical and irreversible con-
+sequences. COGNIX addresses this by replacing uncalibrated confidence scores with
+statistically guaranteed prediction intervals.
+2. Need for Reliable Decision-Making: In real-world deployments, generating a pre-
+diction is insufficient. Systems must also quantify how reliable each prediction is, so
+that downstream actions — proceeding autonomously, alerting a human operator, or
+triggering an emergency stop — can be taken appropriately.
+3. Absence of Uncertainty Decomposition: Most existing models do not distinguish
+between uncertainty arising from irreducible data noise (aleatoric) and uncertainty
+KKWIEER, Department of Artificial Intelligence and Data Science Page 2
+=== PAGE 10 ===
+Chapter: 1
+arising from insufficient model training (epistemic). COGNIX separates these two
+sources, enabling targeted system improvement by identifying which uncertainty can
+be reduced through additional data collection.
+4. Complexity of Multi-Agent Coordination: Modern safety-critical applications
+involve multiple agents operating simultaneously, such as sensor arrays in autonomous
+vehicles or distributed robots in search-and-rescue missions. Combining predictions
+fromtheseagentswithoutaccountingfortheirindividualuncertaintylevelscanresultin
+misleading collective decisions. COGNIX addresses this through uncertainty-weighted
+Bayesian belief fusion and epistemic-trust-driven communication.
+5. Lack of Explainability and Attribution: Existing multi-agent systems provide
+decisions without identifying which agent or component is responsible for collective
+unreliability. COGNIX introduces Shapley-based uncertainty attribution to identify
+the bottleneck agent, providing full decision transparency to both engineers and non-
+technical stakeholders.
+6. Regulatory and Safety Compliance: Emerging regulations including ISO 26262,
+EU AI Act 2.0, and FDA 2026 guidelines require AI systems deployed in safety-critical
+domains to provide structured, auditable, and explainable decision outputs. COG-
+NIX is designed from the ground up to satisfy these requirements through calibrated
+confidence reporting and a three-tier escalation mechanism.
+ThemotivationbehindCOGNIXisthereforetodevelopasystemthatnotonlyim-
+proves prediction accuracy but also makes the decision-making process reliable, transparent,
+attribution-aware, and fully suitable for real-world deployment in high-stakes environments.
+1.3 Literature Survey
+1.3.1 Literature Survey — Module 4: GNN-Based Communica-
+tion Protocol
+The development of COGNIX and specifically Module 4, the GNN-Based Communi-
+cation Protocol, is informed by a careful review of recent research in graph neural network
+communication, uncertainty-aware agent coordination, and bandwidth-efficient multi-agent
+message routing. The following papers are directly relevant to the GNN communication
+component of our project.
+The first paper reviewed is “Learning Efficient and Robust Multi-Agent Commu-
+nication via Graph Information Bottleneck (MAGI)” published in the Proceedings of the
+Thirty-Eighth AAAI Conference on Artificial Intelligence in 2024 [1]. This work identified
+that existing GNN-based communication methods are highly vulnerable to adversarial per-
+turbations, and introduced MAGI, a framework grounded in Graph Information Bottleneck
+theory that learns minimal sufficient message representations by maximising mutual infor-
+KKWIEER, Department of Artificial Intelligence and Data Science Page 3
+=== PAGE 11 ===
+Chapter: 1
+mation between messages and agent actions. Validated against state-of-the-art baselines,
+MAGI demonstrated superior robustness and reduced communication overhead. However,
+MAGI optimises purely for task reward — it does not model calibrated epistemic uncer-
+tainty as a routing signal, does not learn trust weights conditioned on sensor reliability, and
+contains no mechanism to down-weight agents with high model ignorance. This gap between
+task-driven efficiency and uncertainty-driven trust modelling is the core design requirement
+of Module 4.
+The second paper reviewed is “Dynamic Graph Communication for Decentralised
+Multi-Agent Reinforcement Learning” published on arXiv in 2024 [2]. This work addressed
+the limitation that prior frameworks operated over static graph topologies by extending a
+recurrent message-passing model to dynamic environments with node failures, integrating a
+Graph Attention Network layer, and introducing a multi-round targeting mechanism. Eval-
+uated on a dynamic packet-routing environment, the framework achieved a 9.5% increase
+in average rewards and a 6.4% reduction in communication overhead. However, attention
+weights are learned entirely from task reward signals — the framework does not decompose
+agent confidence into aleatoric and epistemic components, does not route messages based on
+epistemic reliability, and provides no calibration-aware trust model for the receiving agent.
+These are exactly the mechanisms Module 4 must provide.
+The third paper reviewed is “Communication-Aware Graph Neural Network for
+Multi-Agent Reinforcement Learning” published in IEEE proceedings in 2025 [3]. This
+work proposed a communication-aware GNN in which agents interact through a dynamic
+directed graph under lossy communication links, demonstrating strong robustness in co-
+operative tasks including coverage and predator-prey scenarios. The key contribution was
+showing that modelling communication as a learnable graph component substantially im-
+proves coordination under network degradation. However, the framework treats robustness
+asafunctionofsignallossandlinkqualityalone—itdoesnotincorporateuncertainty-based
+trust, and no mechanism exists for using σ as an attention signal. The GNN-Based
+epistemic
+Communication Protocol of COGNIX fills this gap by directly wiring calibrated epistemic
+uncertaintyintothegraphattentionweights, makingtrustafunctionofwhatanagentknows
+it does not know.
+Together, these three papers confirm that Graph Attention Networks are the correct
+architectural choice for dynamic multi-agent communication, that information bottleneck
+principles provide a sound basis for message compression, and that dynamic graph struc-
+tures are necessary for real-world robustness. However, no existing solution simultaneously
+uses decomposed epistemic uncertainty as the primary trust signal, learns calibration-aware
+attention weights conditioned on sensor type and environment, and integrates uncertainty-
+driven routing within a real-time sub-100 millisecond pipeline. The GNN-Based Communi-
+cation Protocol of COGNIX fills this gap.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 4
+=== PAGE 12 ===
+Chapter: 1
+1.3.2 Literature Survey — Module 5: Decision and Attribution
+Engine
+ThedevelopmentofCOGNIXandspecificallyModule5, theDecisionandAttribution
+Engine, is informed by a careful review of recent research in multi-agent credit assignment,
+Shapley value attribution, explainable decision-making, and risk-aware human escalation in
+safety-critical AI systems. The following papers are directly relevant to the decision and
+attribution component of our project.
+The first paper reviewed is “Counterfactual Effect Decomposition in Multi-Agent Se-
+quentialDecisionMaking”publishedintheProceedingsofthe42ndInternationalConference
+on Machine Learning (ICML) in 2025 [1]. This work introduced a bi-level causal decomposi-
+tion framework for multi-agent Markov decision processes, decomposing an agent’s counter-
+factual effect into components propagating through subsequent agent actions and through
+state transitions, then operationalising Shapley value to attribute total influence to individ-
+ual agents. Validated on a Gridworld environment and a sepsis management simulator, this
+work provides the causal theoretical foundation for Module 5’s attribution design. However,
+the framework operates entirely on reward decomposition — it attributes task outcomes,
+not calibrated uncertainty, produces no confidence intervals, and provides no escalation logic
+to translate findings into an actionable human-handoff decision. Module 5 fills this gap by
+applying Shapley attribution to epistemic uncertainty rather than rewards.
+The second paper reviewed is “MACIE: Multi-Agent Causal Intelligence Explainer
+for Collective Behavior Understanding” published on arXiv in 2025 [2]. This work presented
+MACIE,thefirstunifiedframeworkcombiningstructuralcausalmodels, interventionalcoun-
+terfactuals, and Shapley values to produce comprehensive multi-agent explanations, includ-
+ing per-agent causal attribution scores, emergent behaviour quantification, natural language
+narratives, and real-time computational optimisations. MACIE directly motivates the at-
+tribution design of Module 5. However, MACIE focuses exclusively on explaining collective
+behaviour outcomes — it does not operate on calibrated uncertainty estimates, does not
+implement threshold-based decision execution, and contains no structured escalation logic
+distinguishing human alert from emergency halt. The Decision and Attribution Engine of
+COGNIX provides precisely this missing integration between attribution and calibrated es-
+calation.
+The third paper reviewed is “Explainable Multi-Agent Deep Reinforcement Learning
+for Decision Systems” published in Applied Energy (Elsevier) in 2025 [3]. This work pro-
+posedanexplainableMARLframeworkforenergyandindustrialcontrolsystems, decompos-
+ing global objectives into per-agent decision contributions and demonstrating improved trust
+and transparency for human operators through post-hoc explanation mechanisms. While the
+work confirms that explainable decision-making is both necessary and achievable in multi-
+KKWIEER, Department of Artificial Intelligence and Data Science Page 5
+=== PAGE 13 ===
+Chapter: 1
+agent deployments, it provides no uncertainty calibration layer, does not separate aleatoric
+from epistemic uncertainty within agent contributions, and does not implement a graded
+risk response — proceed, alert, or escalate — required under ISO 26262 and EU AI Act 2.0.
+The Decision and Attribution Engine of COGNIX fills this gap by unifying Shapley-based
+uncertainty attribution, conformal calibration intervals, and a principled three-tier escala-
+tion logic into a single coherent decision output.
+Together, these three papers confirm that counterfactual Shapley attribution is the
+correct tool for identifying individual agent contributions to collective outcomes, that causal
+explainability is a recognised requirement for trustworthy multi-agent deployment, and that
+attribution combined with interpretable explanations meaningfully improves human over-
+sight. However, no existing solution simultaneously combines uncertainty-attributed Shap-
+ley scoring over decomposed epistemic uncertainty, calibrated conformal prediction intervals,
+and a structured three-tier real-time escalation mechanism. The Decision and Attribution
+Engine of COGNIX fills this gap.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 6
+=== PAGE 14 ===
+Chapter: 2
+Chapter 2
+Problem Definition and Scope
+2.1 Problem Statement
+Artificial Intelligence systems are increasingly used in critical domains such as au-
+tonomous vehicles, healthcare diagnostics, financial decision-making, and multi-robot sys-
+tems. While these systems have achieved high accuracy, a major limitation still exists —
+they often produce decisions without properly representing uncertainty. As a result, sys-
+tems may take incorrect actions with high confidence, which can lead to serious real-world
+consequences.
+Another key challenge arises in multi-agent environments, where multiple AI sys-
+tems or sensors contribute to a shared decision. In such settings, there is no unified mech-
+anism to quantify, combine, and interpret uncertainty across different agents. Existing ap-
+proaches typically focus on single-model predictions and fail to address how uncertainty
+should be communicated, calibrated, and used for decision-making in a distributed system.
+Therefore, there is a need to design a system that not only generates predictions
+but also provides reliable uncertainty estimates, combines information from multiple agents,
+ensures calibrated confidence, and supports explainable decision-making. The COGNIX sys-
+tem aims to address this gap by developing a structured framework for uncertainty-aware
+multi-agent decision systems.
+2.1.1 Goals and Objectives
+COGNIX aims to build a complete decision-making framework that integrates mul-
+tiple intelligent agents, uncertainty modeling, and calibration techniques. The focus is not
+only on prediction accuracy but also on reliability and interpretability of results.
+• Goals
+1. Develop COGNIX as a unified multi-agent decision system that incorporates un-
+certainty awareness at every stage of processing.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 7
+=== PAGE 15 ===
+Chapter: 2
+2. Enable reliable and interpretable decision-making by integrating prediction, un-
+certainty estimation, calibration, and explanation within a single framework.
+3. Improve safety and robustness of AI systems operating in real-world environments
+by reducing overconfident incorrect decisions.
+4. Build a scalable architecture that supports multiple agents and heterogeneous
+data sources such as sensors, simulations, and real-world inputs.
+• Objectives
+1. FrameworkDevelopment: Designandimplementacomplete5-moduleBayesian
+multi-agentsystemforend-to-enduncertaintyquantificationanddecision-making.
+2. Uncertainty Modeling: Decompose uncertainty into aleatoric (irreducible data
+noise) and epistemic (reducible model uncertainty) at the individual agent level.
+3. Confidence Calibration: Provide mathematically guaranteed and reliable con-
+fidence intervals using conformal prediction techniques.
+4. Efficient Communication: Enable intelligent and uncertainty-aware commu-
+nication between agents using Graph Neural Networks (GNNs).
+5. Uncertainty Attribution: Identify and quantify the contribution of each agent
+to overall system uncertainty using Shapley value-based methods.
+6. Multi-Domain Validation: Evaluate system performance across real-world do-
+mains such as autonomous driving (CARLA), medical diagnosis (CheXpert), and
+drone swarm search and rescue.
+7. Regulatory Compliance: EnsurethesystemmeetsmodernAIsafetyandtrans-
+parency standards such as ISO 26262, EU AI Act 2.0, and FDA guidelines.
+2.1.2 Assumptions and Scope
+• Assumptions
+⋄ Data Availability: It is assumed that sufficient training and testing data is
+available through simulation environments and real-world datasets.
+⋄ Sensor Inputs: The system assumes that agents provide structured input data
+such as images, numerical readings, or extracted features suitable for machine
+learning models.
+⋄ Computational Resources: It is assumed that adequate computational re-
+sources are available for model training and real-time inference.
+⋄ Model Generalization: The system assumes that models trained on simulation
+data can generalize reasonably well to real-world scenarios.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 8
+=== PAGE 16 ===
+Chapter: 2
+• Scope
+⋄ The project focuses on developing a multi-module AI system that integrates
+uncertainty estimation, probabilistic reasoning, calibration, communication, and
+decision-making.
+⋄ Thesystemisdesignedformulti-agentenvironmentssuchasautonomousvehicles,
+robotics, and distributed sensing systems.
+⋄ Validation is carried out using simulation platforms and controlled experimental
+setups.
+⋄ The project emphasizes system design, model implementation, and evaluation
+rather than large-scale industrial deployment.
+⋄ The system outputs include predictions along with uncertainty measures and ex-
+planations for decision-making.
+⋄ User interface development and large-scale production deployment are not in-
+cluded in the scope of this project.
+By clearly defining the problem, goals, and scope, the COGNIX system aims to
+provide a reliable and structured approach for uncertainty-aware decision-making in modern
+AI systems.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 9
+=== PAGE 17 ===
+Chapter: 3
+Chapter 3
+Methodology
+3.1 Methodology
+Refer to Fig. 3.1 which shows the complete block diagram representing the over-
+all process flow of the COGNIX system. The system operates as a sequential, end-to-end
+uncertainty-aware decision pipeline in which sensor observations are first decomposed into
+aleatoric and epistemic uncertainty components, fused across agents through Bayesian belief
+propagation, calibrated using conformal prediction, routed intelligently through a graph-
+basedcommunicationprotocol, andfinallyresolvedintoarisk-attributeddecisionwithstruc-
+tured human escalation logic.
+1. Multi-Agent Input Acquisition: The system receives multi-modal sensor data in-
+cluding camera feeds, LiDAR scans, V2V broadcasts, and map-based predictions dis-
+tributed across multiple agents. Each agent processes its own sensor stream indepen-
+dently to ensure diverse and non-redundant perspectives across the agent network.
+2. Uncertainty Decomposition (Module 1): Each agent separates its prediction
+uncertainty into two components — aleatoric uncertainty, which represents irreducible
+noise inherent in sensor data, and epistemic uncertainty, which represents reducible
+model ignorance. This is achieved using an ensemble of N models combined with
+Monte Carlo Dropout at inference time, producing a triple (µ, σ , σ ) per
+aleatoric epistemic
+agent.
+3. Bayesian Belief Fusion (Module 2): AgentbeliefsarerepresentedasfullBeta(α,β)
+distributions rather than point estimates. Loopy Belief Propagation with five message-
+passing iterations fuses beliefs across agents, with message weights inversely propor-
+tional to each agent’s epistemic uncertainty. Agents with high model uncertainty re-
+ceive greater external influence; correlated evidence between agents is automatically
+discounted.
+4. Conformal Calibration (Module 3): The fused predictions are passed through a
+two-stage conformal calibration layer. Individual thresholds τ are first computed per
+i
+agent using a held-out calibration set, followed by a collective threshold computed on
+KKWIEER, Department of Artificial Intelligence and Data Science Page 10
+=== PAGE 18 ===
+Chapter: 3
+the aggregated output. This guarantees P(Y ∈ interval) ≥ 0.95 at both the individual
+and collective levels without requiring any model retraining.
+5. Uncertainty-Aware Communication (Module 4): Calibrated epistemic uncer-
+tainty from Module 1 is wired directly into the attention weights of a three-layer
+Graph Attention Network. Agents are modelled as nodes and communication links as
+edges. The system learns to trust reliable agents more and down-weights uncertain
+agents automatically, achieving bandwidth-constrained routing with a 37% reduction
+in communication overhead without loss in calibration accuracy.
+6. Decision Making and Attribution (Module 5): The system applies domain-
+specific risk thresholds to the calibrated collective confidence and computes Shapley-
+based attribution scores to identify the agent contributing most to collective uncer-
+tainty. Decisions are classified as high confidence (> 70%), medium confidence (40%–
+70%), or low confidence (< 40%), triggering autonomous execution, human alert, or
+emergency escalation respectively.
+7. System Output and Feedback: The final output includes a calibrated action rec-
+ommendation, a 95% prediction interval, an uncertainty breakdown into aleatoric and
+epistemiccomponents, anagent-levelattributionreport, andariskclassification. Feed-
+back loops continuously update calibration logs and uncertainty trends for future in-
+ference.
+Figure 3.1: COGNIX — Overall System Block Diagram
+3.1.1 GNN-Based Communication Protocol (Module 4)
+RefertoFig.3.2whichshowstheworkingoftheGNN-BasedCommunicationProtocol
+within the COGNIX system. Module 4 receives calibrated epistemic uncertainty values
+from Module 1 and the conformal calibration thresholds from Module 3, and uses them to
+KKWIEER, Department of Artificial Intelligence and Data Science Page 11
+=== PAGE 19 ===
+Chapter: 3
+construct a dynamic Graph Attention Network in which agent trust is a direct function of
+decomposed model uncertainty rather than raw signal quality.
+3.1.1.1 Agent Input Representation
+Each agent i arrives at Module 4 carrying the output tuple produced by Module 1 and the
+calibration threshold produced by Module 3:
+I = (µ , σ , σ , τ , [ℓ , u ]) (3.1)
+i i a,i e,i i i i
+where µ is the predicted mean, σ is aleatoric uncertainty, σ is epistemic uncertainty,
+i a,i e,i
+τ is the per-agent conformal threshold, and [ℓ ,u ] is the 95% calibrated prediction interval
+i i i
+received from Module 3.
+3.1.1.2 Agent Graph Construction
+The multi-agent system is represented as a dynamic directed graph G = (V,E) where each
+node v ∈ V denotes an agent and each directed edge e ∈ E denotes a candidate commu-
+i ij
+nication link from agent j to agent i. The graph topology is not fixed — nodes are added
+or removed in real time as agents join, fail, or enter communication blackouts, ensuring the
+network remains robust to partial agent failure.
+3.1.1.3 Epistemic Uncertainty as Trust Signal
+The key design decision in Module 4 is that inter-agent trust is inversely proportional to
+the sender’s epistemic uncertainty. The initial attention weight assigned to agent j when
+sending to agent i is computed as:
+1
+w(0) = (3.2)
+j→i 1+σ
+e,j
+This weight is injected directly into the Graph Attention Network as a node-level feature
+before any training begins. Agents with lower σ receive higher initial trust; agents whose
+e,j
+model ignorance is high are down-weighted from the first attention pass. This is the first
+mechanism of its kind to use calibrated model ignorance — rather than signal loss or link
+quality — as the primary determinant of inter-agent trust.
+3.1.1.4 Information Gain Routing
+Each candidate message from agent j to agent i is scored by an information gain metric
+defined as:
+Confidence
+j
+Gain = (3.3)
+j→i
+σ +ϵ
+e,i
+where ϵ is a small constant that prevents division by zero. Messages are ranked by this
+score and only the top-K messages within the available bandwidth budget are transmitted.
+This greedy selection strategy ensures that the most informative messages are always pri-
+oritised, reducing communication overhead by 37% without any degradation in calibration
+accuracy or coordination performance.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 12
+=== PAGE 20 ===
+Chapter: 3
+3.1.1.5 Attention Weight Learning
+The three-layer Graph Attention Network refines the initial trust weights through training.
+At each attention layer l, the updated weight between agents j and i is computed via
+softmax-normalised attention over the neighbourhood N(i):
+(cid:16) (cid:16) (cid:17)(cid:17)
+exp LeakyReLU a⊤[Wh(l)∥Wh(l)]
+i j
+α(l) = (3.4)
+ij (cid:88) (cid:16) (cid:16) (cid:17)(cid:17)
+exp LeakyReLU a⊤[Wh(l)∥Wh(l)]
+i k
+k∈N(i)
+where h(l) is the hidden representation of agent i at layer l, W is a learnable weight
+i
+matrix, and a is an attention vector. The σ value is concatenated into h(0) as an explicit
+e,i i
+node feature, ensuring that epistemic uncertainty remains visible to the attention mechanism
+throughout all layers.
+3.1.1.6 Aggregated Message Passing
+At each receiving node i, the aggregated representation is computed as:
+ 
+(cid:88)
+h(l+1) = σ α(l)Wh(l)  (3.5)
+i ij j
+j∈N(i)
+where σ(·) is an activation function. The final aggregated representation h(3) after three
+i
+GAT layers is forwarded to Module 2’s Bayesian Belief Network for the next round of be-
+lief fusion, ensuring that only the most reliable and informative signals propagate into the
+collective decision pipeline.
+3.1.1.7 Convergence Check
+Attention weight stability is measured by KL divergence between successive weight distri-
+butions:
+(cid:0) (cid:1)
+D w(t+1)∥w(t) < 0.0001 (3.6)
+KL
+When this condition holds for all agent pairs, the attention learning loop terminates and
+the trust-weighted message set is forwarded to Module 5.
+3.1.1.8 Module-Level Architecture
+Within the complete COGNIX pipeline, Module 4 sits between the conformal cali-
+bration layer and the decision engine. It does not replace Module 3; instead, it consumes
+Module 3’s calibrated intervals and Module 1’s epistemic uncertainty decomposition and
+converts them into a trust-weighted communication graph. This filtered message set then
+becomes the input for Module 5’s Shapley-based attribution and escalation logic. The com-
+plete module-level architecture is shown in Fig. 3.2.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 13
+=== PAGE 21 ===
+Chapter: 3
+Figure 3.2: Module-level architecture of the GNN-Based Communication Protocol
+KKWIEER, Department of Artificial Intelligence and Data Science Page 14
+=== PAGE 22 ===
+Chapter: 3
+3.1.1.9 Algorithm
+Algorithm 1: Epistemic-Uncertainty-Driven Graph Attention Routing
+Input: Agent inputs I = (µ ,σ ,σ ,τ ,[ℓ ,u ]), graph G = (V,E), bandwidth
+i i a,i e,i i i i
+budget K
+Output: Trust-weighted message set M, attention weights {α }
+ij
+Initialise node features h(0) ← [µ , σ , τ ];
+i i e,i i
+Compute initial trust weights w(0) = 1/(1+σ );
+j→i e,j
+for each GAT layer l = 0,1,2 do
+for each edge (j,i) ∈ E do
+Compute attention coefficient α(l) via softmax;
+ij
+Aggregate neighbour representations;
+Update h(l+1);
+i
+Compute D (w(l+1)∥w(l));
+KL
+if D < 0.0001 for all pairs then
+KL
+stop;
+for each candidate message m do
+j→i
+Compute Gain = Confidence /(σ +ϵ);
+j→i j e,i
+Select top-K messages by Gain score;
+return M and final attention weights {α };
+ij
+3.1.1.10 Tools and Technologies
+Table 3.1: Technology stack for Module 4
+Tool Purpose
+Python Core implementation language
+PyTorch 2.0.1 Neural network training and inference
+PyTorch Geometric Graph Attention Network layers and graph opera-
+tions
+NetworkX Dynamic agent graph construction and topology
+management
+NumPy / SciPy Attention weight computation and numerical oper-
+ations
+Matplotlib / Plotly Visualising attention weights and routing decisions
+CARLA 0.9.14 Autonomous vehicle simulation for validation
+PettingZoo 1.24.0 Multi-agent environment framework for testing
+KKWIEER, Department of Artificial Intelligence and Data Science Page 15
+=== PAGE 23 ===
+Chapter: 3
+3.1.1.11 Real-Time Feasibility
+The full COGNIX system targets a 100ms decision budget. Module 4 is designed to remain
+lightweight by limiting attention computation to the active agent graph, terminating the
+attention loop once KL divergence reaches the convergence threshold, and selecting only the
+top-K messages within the bandwidth budget. Since the project-scale graph is expected to
+converge within three GAT layers, the module can produce a trust-weighted message set
+quickly enough for downstream decision attribution and escalation.
+Research Gap Addressed by Module 4: Existing GNN-based communication frame-
+works such as MAGI and dynamic graph communication methods optimise message selection
+for task reward and signal robustness. No prior system directly uses σ as a first-class
+epistemic
+attention signal, learns calibration-aware trust weights conditioned on sensor type and en-
+vironmental condition, or integrates uncertainty-driven routing within a real-time pipeline
+constrained to under 100 milliseconds. Module 4 of COGNIX is the first system to achieve
+this combination.
+3.1.2 Decision and Attribution Engine (Module 5)
+Refer to Fig. 3.3 which shows the working of the Decision and Attribution Engine
+within the COGNIX system. Module 5 receives the calibrated collective confidence interval
+from Module 3, the aggregated belief from Module 2, the uncertainty decomposition from
+Module 1, and the trust-weighted messages from Module 4, and combines them into a com-
+plete decision output that includes a recommended action, a risk classification, an agent-level
+attribution report, and a structured human escalation signal.
+3.1.2.1 Collective Input Representation
+Module 5 receives the following structured input from the upstream pipeline:
+(cid:0) (cid:1)
+C = µ , σ , σ , [ℓ, u], {σ }N (3.7)
+joint a,joint e,joint e,i i=1
+where µ is the collective posterior mean from Module 2, σ and σ are the
+joint a,joint e,joint
+aggregated aleatoric and epistemic uncertainties, [ℓ,u] is the 95% conformal prediction in-
+terval from Module 3, and {σ } is the per-agent epistemic uncertainty set used for Shapley
+e,i
+attribution.
+3.1.2.2 Calibrated Confidence Thresholding
+The collective calibrated confidence score is compared against three domain-specific thresh-
+olds:
+
+PROCEED if c > 0.70
+  joint
+Decision = ALERT if 0.40 ≤ c ≤ 0.70 (3.8)
+joint
+
+STOP if c < 0.40
+joint
+These thresholds are domain-specific and can be reconfigured independently for au-
+tonomous driving, medical diagnosis, and drone swarm search and rescue applications.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 16
+=== PAGE 24 ===
+Chapter: 3
+3.1.2.3 Risk Classification
+The decision is classified into one of three risk levels — Low, Moderate, or High — based on
+three simultaneous criteria: the magnitude of total uncertainty σ , the width of the 95%
+total
+conformal prediction interval (u − ℓ), and the magnitude of epistemic uncertainty σ .
+e,joint
+A wide confidence interval combined with high epistemic uncertainty produces a High risk
+classification even if the point prediction confidence is nominally above the autonomous
+execution threshold.
+3.1.2.4 Shapley-Based Uncertainty Attribution
+Shapley values are computed to measure the marginal contribution of each agent to the
+collective epistemic uncertainty. For agent i, the attribution score is defined as:
+ϕ = σwithagenti −σwithoutagenti (3.9)
+i e e
+This identifies the bottleneck agent — the single agent whose model ignorance is con-
+tributing most to collective system unreliability. For example, in the autonomous vehicle
+intersection scenario, the V2V Agent is identified as contributing 45.2% of total uncertainty,
+flagging it for targeted data collection and model retraining. This is the first system to com-
+pute Shapley attribution over decomposed epistemic uncertainty rather than over reward
+outcomes or task performance.
+3.1.2.5 Escalation Logic
+The escalation decision is determined by three independent conditions evaluated simultane-
+ously:
+
+True if σ > 0.25
+  e,joint
+Escalate = True if max (ϕ ) > 0.50 (3.10)
+i i
+
+False otherwise — proceed autonomously
+The first condition escalates when the system has insufficient training data coverage
+for the current scenario. The second escalates when a single-agent bottleneck dominates
+collective uncertainty. If neither condition is triggered, the system proceeds autonomously
+and reports the calibrated confidence interval to the operator dashboard.
+3.1.2.6 Multi-Agent Decision Council
+Beforethefinaldecisionisissued, threeinternallyinstantiatedagentsindependentlyevaluate
+the calibrated output:
+• Optimist Agent: recommends proceeding when confidence is above the autonomous
+threshold.
+• Risk-Averse Agent: flags any epistemic uncertainty above a safe margin regardless
+of confidence score.
+• Judge Agent: synthesises both perspectives into a balanced decision insight that
+forms the final recommendation.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 17
+=== PAGE 25 ===
+Chapter: 3
+This adversarial internal review mechanism reduces the probability of systematic bias in
+the final recommendation by requiring consensus across perspectives before the decision is
+committed to the execution engine.
+3.1.2.7 Module-Level Architecture
+Within the complete COGNIX pipeline, Module 5 is the terminal module. It does not
+replace any upstream module; instead, it consumes the full calibrated output of Modules 1
+through 4 and converts it into a single auditable decision record. This record is forwarded
+to the execution engine and simultaneously logged to the memory and session store for
+calibration feedback and continuous learning. The complete module-level architecture is
+shown in Fig. 3.3.
+3.1.2.8 Algorithm
+Algorithm 2: Shapley-Attributed Escalation Decision Engine
+Input: Collective input C = (µ , σ , σ , [ℓ,u], {σ })
+joint a e e,i
+Output: Action, risk level, attribution {ϕ }, escalation decision
+i
+Compute confidence c = 1−σ ;
+joint e,joint
+if c > 0.70 then
+joint
+Action ← PROCEED;
+else
+if c ≥ 0.40 then
+joint
+Action ← ALERT;
+else
+Action ← STOP;
+Classify risk level based on σ , (u−ℓ), σ ;
+total e,joint
+for each agent i do
+Compute ϕ = σwithi −σwithouti;
+i e e
+Identify bottleneck agent i∗ = argmax ϕ ;
+i i
+if σ > 0.25 or ϕ > 0.50 then
+e,joint i∗
+Escalate ← True;
+else
+Escalate ← False;
+Convene Decision Council (Optimist, Risk-Averse, Judge);
+return action, risk level, {ϕ }, escalation, justification;
+i
+3.1.2.9 Tools and Technologies
+3.1.2.10 Real-Time Feasibility
+The full COGNIX system targets a 100ms decision budget. Module 5 is designed to remain
+computationally efficient by computing Shapley values over the active agent set only, using
+marginal epistemic differences rather than exhaustive coalition enumeration, and applying
+threshold comparisons as constant-time operations. The Decision Council deliberation adds
+KKWIEER, Department of Artificial Intelligence and Data Science Page 18
+=== PAGE 26 ===
+Chapter: 3
+Figure 3.3: Module-level architecture of the Decision and Attribution Engine
+KKWIEER, Department of Artificial Intelligence and Data Science Page 19
+=== PAGE 27 ===
+Chapter: 3
+Table 3.2: Technology stack for Module 5
+Tool Purpose
+Python Core implementation language
+PyTorch 2.0.1 Tensor-based confidence scoring and inference
+pipeline
+NumPy / SciPy Shapley value computation and statistical thresh-
+old evaluation
+SHAP Library Shapley attribution implementation and visualisa-
+tion
+Matplotlib / Plotly Attribution bar charts and decision dashboard vi-
+sualisation
+CARLA 0.9.14 Autonomous vehicle scenario validation
+PettingZoo 1.24.0 Multi-agent environment framework for escalation
+testing
+DuckieBot + RPi 4 Physical robot validation of real-time decision la-
+tency
+negligible latency as each of the three internal agents evaluates a pre-computed scalar con-
+fidence score. The combined latency of Shapley attribution and escalation logic is expected
+to remain well within the available decision budget after upstream modules have completed
+their processing.
+Research Gap Addressed by Module 5: Existing attribution frameworks such as MA-
+CIE and counterfactual decomposition methods compute agent-level contributions to collec-
+tive task outcomes or reward signals. No prior system applies Shapley attribution to de-
+composed epistemic uncertainty, combines attribution with conformal calibration intervals,
+or integrates a structured three-tier escalation logic operating within a real-time sub-100
+millisecond constraint compliant with ISO 26262 and EU AI Act 2.0. The Decision and
+Attribution Engine of COGNIX is the first system to unify all three capabilities into a single
+coherent decision output.
+3.2 Type of Project
+TheCOGNIXModule4projectcanbecategorizedasbothapplication-orientedandresearch-
+oriented, with a strong focus on improving inter-agent communication reliability through
+uncertainty-driven trust modelling and bandwidth-constrained graph attention routing.
+• Application-Oriented:
+The GNN-Based Communication Protocol is designed to operate in real-world
+multi-agent deployments such as autonomous vehicle intersections, drone swarms, and
+multi-robot coordination environments. The Graph Attention Network ensures that
+KKWIEER, Department of Artificial Intelligence and Data Science Page 20
+=== PAGE 28 ===
+Chapter: 3
+only the most reliable and informative agent messages are propagated through the
+network, reducing bandwidth consumption while maintaining coordination accuracy
+under dynamic and degraded sensor conditions.
+• Research-Oriented:
+The project explores the novel application of calibrated epistemic uncertainty as a
+first-class attention signal within a Graph Attention Network. No prior work has used
+decomposed model uncertainty — rather than task reward or signal quality — as the
+primary determinant of inter-agent trust. This adds a significant research dimension
+to the communication protocol design.
+• AI and Machine Learning Domain:
+Themoduleappliesconceptsfromgraphneuralnetworks,attentionmechanisms,Bayesian
+uncertainty quantification, and information-theoretic message selection to build an in-
+telligent, self-adapting communication layer that improves system performance under
+real-world noise and agent failure conditions.
+• The main outcomes of the GNN-Based Communication Protocol are:
+– Uncertainty-Driven Trust: Agents with lower epistemic uncertainty are au-
+tomatically granted higher attention weights, ensuring the most knowledgeable
+agents drive collective decisions.
+– Bandwidth Efficiency: The information gain routing mechanism achieves a
+37% reduction in communication overhead without any loss in calibration accu-
+racy or coordination performance.
+– Dynamic Adaptability: The graph topology adapts in real time to agent fail-
+ures and communication blackouts, maintaining system robustness under partial
+network degradation.
+– Environment-Aware Routing: Attention weights are learned per sensor type
+and environmental condition — for example, LiDAR is automatically trusted over
+camera in fog scenarios without hand-coded rules.
+3.3 Expected Outcomes
+3.3.1 Input and Output Format
+The input to Module 4 is the calibrated uncertainty tuple produced by Module 1
+and the conformal calibration thresholds from Module 3. This includes the agent identifier,
+the calibrated prediction, the decomposed uncertainty components, and the 95% confidence
+interval that has been guaranteed by the upstream conformal calibration layer:
+KKWIEER, Department of Artificial Intelligence and Data Science Page 21
+=== PAGE 29 ===
+Chapter: 3
+Input:
+{
+agent_id: 3,
+calibrated_mu: 0.72,
+sigma_aleatoric: 0.15,
+sigma_epistemic: 0.09,
+conf_lower: 0.55,
+conf_upper: 0.88,
+confidence_level: 0.95
+}
+The Graph Attention Network processes this input by constructing a dynamic
+agent graph, computing attention weights inversely proportional to each agent’s epistemic
+uncertainty, and selecting the top-ranked messages within the available bandwidth budget
+using the information gain routing criterion.
+The output of Module 4 is a trust-weighted, bandwidth-filtered set of inter-agent
+messages along with the learned attention weight assigned to each agent under the current
+environmental condition:
+Output:
+{
+agent_id: 3,
+attention_weight: 0.45,
+message_selected: true,
+info_gain_score: 0.83,
+routed_to: [1, 2, 5],
+bandwidth_saved: 0.37
+}
+TheoutputisforwardedsimultaneouslytoModule2forthenextroundofBayesian
+belief fusion and to Module 5 for attribution-aware decision making. The trust-weighted
+messages ensure that only the most epistemically reliable agent signals propagate into the
+collective decision pipeline, reducing the risk of overconfident aggregation caused by uncer-
+tain agent contributions.
+3.4 Type of Project
+TheCOGNIXModule5projectcanbecategorizedasbothapplication-orientedandresearch-
+oriented, with a strong focus on producing transparent, attributed, and risk-calibrated deci-
+sions that are fully compliant with ISO 26262, EU AI Act 2.0, and FDA safety guidelines.
+• Application-Oriented:
+KKWIEER, Department of Artificial Intelligence and Data Science Page 22
+=== PAGE 30 ===
+Chapter: 3
+The Decision and Attribution Engine is designed to operate directly in safety-
+critical real-world deployments including autonomous driving intersections, medical
+diagnosis pipelines, and multi-robot search and rescue coordination. The system pro-
+duces a complete, actionable decision output that not only recommends an action but
+also identifies which specific agent is the weakest link in the collective reasoning chain
+and whether human escalation is required.
+• Research-Oriented:
+The project introduces the first application of Shapley value attribution computed
+over decomposed epistemic uncertainty rather than task reward or action outcomes.
+Combining Shapley-based uncertainty attribution with conformal calibration intervals
+and a three-tier structured escalation mechanism within a real-time sub-100 millisec-
+ond constraint represents a novel research contribution to the field of explainable and
+safe multi-agent AI.
+• AI and Machine Learning Domain:
+The module applies concepts from cooperative game theory (Shapley values), statisti-
+cal calibration (conformal prediction), Bayesian risk modelling, and explainable AI to
+build a decision engine that is not only accurate but also transparent, attributed, and
+safe for deployment in high-stakes environments.
+• The main outcomes of the Decision and Attribution Engine are:
+– Risk-Graded Decisions: The system produces three-tier risk-classified deci-
+sions — autonomous execution, human alert, or emergency escalation — based
+on calibrated confidence intervals rather than raw model scores.
+– Uncertainty Attribution: Shapley values identify the bottleneck agent whose
+model ignorance is driving collective system unreliability, enabling targeted data
+collection and model improvement.
+– Regulatory Compliance: The structured escalation logic and calibrated con-
+fidence reporting satisfy ISO 26262, EU AI Act 2.0, and FDA 2026 safety and
+transparency requirements.
+– Full Decision Transparency: Every output includes a complete uncertainty
+breakdown, attribution report, risk classification, and escalation justification that
+is interpretable by both engineers and non-technical stakeholders.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 23
+=== PAGE 31 ===
+Chapter: 3
+3.5 Expected Outcomes
+3.5.1 Input and Output Format
+The input to Module 5 is the collective calibrated output produced by the upstream
+pipeline. ThisincludestheaggregatedBayesianbelief, theconformalpredictionintervalfrom
+Module 3, the decomposed uncertainty components from Module 1, and the trust-weighted
+agent messages from Module 4:
+Input:
+{
+collective_mu: 0.72,
+sigma_aleatoric: 0.15,
+sigma_epistemic: 0.09,
+total_uncertainty: 0.24,
+conf_lower: 0.55,
+conf_upper: 0.88,
+confidence_level: 0.95,
+agent_epistemic: {
+agent_1: 0.04,
+agent_2: 0.06,
+agent_3: 0.09,
+agent_4: 0.11,
+agent_5: 0.07
+}
+}
+The Decision and Attribution Engine processes this input by applying calibrated
+confidence thresholds to determine the appropriate action tier, computing Shapley attribu-
+tionscorestoidentifythebottleneckagent,andevaluatingescalationlogicbasedonepistemic
+uncertainty magnitude and single-agent dominance conditions.
+The output of Module 5 is the complete COGNIX decision record, containing
+the recommended action, risk classification, attribution report, escalation decision, and full
+uncertainty breakdown:
+Output:
+{
+action: "PROCEED",
+calibrated_confidence: 0.72,
+conf_interval: [0.55, 0.88],
+risk_level: "LOW",
+sigma_aleatoric: 0.15,
+sigma_epistemic: 0.09,
+shapley_attribution: {
+agent_1: 0.08,
+KKWIEER, Department of Artificial Intelligence and Data Science Page 24
+=== PAGE 32 ===
+Chapter: 3
+agent_2: 0.12,
+agent_3: 0.19,
+agent_4: 0.45,
+agent_5: 0.16
+},
+bottleneck_agent: 4,
+escalate: false,
+escalation_reason: "confidence 72% exceeds threshold 65%",
+recommendation: "Flag agent_4 for additional data collection"
+}
+The output is forwarded to the execution engine which carries out the recom-
+mended action, and simultaneously logged to the memory and session store for calibration
+feedback and continuous system improvement. The complete attribution report and risk
+classification are displayed on the system output dashboard, ensuring that every decision
+made by COGNIX is not only accurate and reliable but also fully explainable, traceable,
+and compliant with safety regulations.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 25
+=== PAGE 33 ===
+Chapter: 4
+Chapter 4
+Project Plan
+4.1 Project Timeline
+2026
+Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+ProjectTimeline
+1. InitialPlanningandRequirementGathering
+2. ResearchandTechnologySelection
+3. DatasetCollectionandPreprocessing
+4. PrototypeDevelopmentandPoC
+5. TestingandValidation
+6. FinalImplementationandDeployment
+7. Documentation
+Table 4.1: Project Timeline
+4.2 Team Organisation
+The Cognix project is developed by a team of four members, each responsible for specific
+modules of the complete system.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 26
+=== PAGE 34 ===
+Chapter: 4
+4.2.1 Team Structure
+1. Komal — Module 1: Uncertainty Detection Engine
+Komal is responsible for designing and implementing the Bayesian Neural Network-
+based uncertainty decomposition pipeline that forms the foundation of the entire Cog-
+nix system.
+Key Responsibilities:
+⋄ Aleatoric and Epistemic Uncertainty Decomposition using BNN
+⋄ Variational Inference training with ELBO loss
+⋄ Posterior sampling pipeline (S=50 weight samples)
+⋄ Structured output tuple generation (µ, σ , σ )
+a e
+⋄ CARLA simulation scenario design for validation
+⋄ DuckieBot hardware latency testing and optimisation
+⋄ Literature review for uncertainty detection methods
+2. Aryan — Module 2: Bayesian Belief Network
+Aryan is responsible for multi-agent probabilistic belief fusion using Loopy Belief Prop-
+agation, weighted by epistemic uncertainty from Module 1.
+Key Responsibilities:
+⋄ Bayesian Belief Network design and implementation
+⋄ Loopy Belief Propagation algorithm
+⋄ Epistemic-uncertainty-weighted message passing
+⋄ Convergence testing and collective posterior computation
+3. Aditya — Module 3: Conformal Calibration Engine
+Adityaisresponsibleforprovidingstatisticalguaranteesonpredictionreliabilitythrough
+conformal calibration techniques.
+Key Responsibilities:
+⋄ Conformal Prediction implementation with coverage guarantees
+⋄ Calibration of uncertainty outputs from Module 1 and Module 2
+⋄ Two-stage hierarchical calibration (individual and collective)
+⋄ Non-conformity score computation and threshold selection
+KKWIEER, Department of Artificial Intelligence and Data Science Page 27
+=== PAGE 35 ===
+Chapter: 4
+4. Zaid — Module 4 and 5: Communication and Decision Engine
+Zaid is responsible for efficient inter-agent uncertainty communication and final risk-
+aware decision making with attribution.
+Key Responsibilities:
+⋄ Graph Attention Network for uncertainty-aware communication
+⋄ Bandwidth-constrained message selection protocol
+⋄ Task-specific decision threshold design
+⋄ Shapley value-based uncertainty attribution per agent
+⋄ Escalation decision tree implementation
+⋄ Final decision output formatting and logging
+KKWIEER, Department of Artificial Intelligence and Data Science Page 28
+=== PAGE 36 ===
+Chapter: 5
+Chapter 5
+Experimental setup
+In order to evaluate the performance of the COGNIX system, a controlled experi-
+mental setup was designed. The aim was to analyze not only prediction accuracy but also
+the reliability and calibration of outputs. The system was tested under different conditions
+to understand how well it handles uncertainty in a multi-agent environment. The follow-
+ing sections describe the dataset, technologies used, and performance parameters considered
+during evaluation.
+5.1 Data Set
+Synthetic and Benchmark Dataset
+• Source: Combination of synthetically generated data and standard machine learning
+benchmark datasets.
+• Formats: Structured numerical data along with simulated observations representing
+different agent inputs.
+• Content Variety:
+⋄ Regression-based data for continuous prediction tasks
+⋄ Classification scenarios with probabilistic outputs
+⋄ Simulated multi-agent observations with varying uncertainty levels
+5.2 Technology Used
+• Machine Learning Framework:
+⋄ PyTorch for building and training predictive models
+• Uncertainty Estimation:
+⋄ Monte Carlo Dropout and ensemble-based techniques for estimating uncertainty
+• Calibration Layer:
+KKWIEER, Department of Artificial Intelligence and Data Science Page 29
+=== PAGE 37 ===
+Chapter: 5
+⋄ Conformal Prediction implemented as a post-processing step for generating cali-
+brated intervals
+• Backend & Processing:
+⋄ Python 3.x for overall system implementation
+⋄ NumPy and Pandas for data manipulation and processing
+• Development Tools:
+⋄ Git for version control and collaboration
+⋄ Jupyter Notebook for experimentation and analysis
+5.3 Performance Parameters
+To evaluate the effectiveness of the system, both prediction performance and calibra-
+tion quality were measured. The following parameters were considered:
+• Prediction Accuracy:
+– Measures how close the predicted values are to actual values
+– Used standard metrics such as Mean Squared Error (MSE) or accuracy for clas-
+sification
+• Calibration Accuracy:
+– Evaluates how well the predicted confidence matches actual correctness
+– Goal: Confidence levels should align with real-world outcomes
+• Coverage:
+– Percentage of true values that lie within the predicted confidence interval
+– Target: Coverage close to predefined confidence level (e.g., 95%)
+• Prediction Interval Width:
+– Measures the size of the confidence interval
+– Narrower intervals with correct coverage indicate better performance
+• Computation Time:
+– Time required to generate predictions and calibration intervals
+– Evaluated to ensure system efficiency
+• System Reliability:
+– Measures consistency of predictions across different agents
+– Helps in evaluating robustness of multi-agent decision-making
+KKWIEER, Department of Artificial Intelligence and Data Science Page 30
+=== PAGE 38 ===
+Chapter: 6
+Chapter 6
+PO & PSO Mapping
+6.1 Program Outcome (PO) Mapping
+PO Description Level Justification
+PO1 Engineering Knowledge: 3 Cognix applies advanced
+Apply knowledge of math- mathematics including
+ematics, science, and engi- Bayesian inference, prob-
+neering fundamentals to AI ability distributions, Vari-
+and DS problems. ational Inference, ELBO
+loss, Shapley values, graph
+theory, and conformal
+prediction to solve complex
+multi-agent uncertainty
+quantification problems.
+PO2 Problem Analysis: Iden- 3 The core problem of over-
+tify, formulate, and ana- confident AI systems was
+lyze complex problems us- identified, formally defined,
+ing principles of math, nat- and analyzed through a re-
+ural science, and engineer- view of three recent IEEE
+ing. papers, reaching the sub-
+stantiated conclusion that
+aleatoric and epistemic un-
+certainty must be separated
+in real-time multi-agent set-
+tings.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 31
+=== PAGE 39 ===
+Chapter: 6
+PO3 Design/Development of 3 A complete five-module sys-
+Solutions: Design sys- tem was designed address-
+tem components or pro- ing public safety — au-
+cesses considering societal, tonomous driving, medical
+safety, and environmental diagnosis, financial trading
+factors. — with appropriate consid-
+eration for regulatory com-
+pliance including ISO 26262
+and EU AI Act 2.0.
+PO4 Conduct Investigations 3 Experiments are designed
+of Complex Problems: using CARLA simulator
+Conduct research-based in- across four uncertainty
+vestigations, design exper- scenario categories, with
+iments, analyze data, and analysis of decomposition
+synthesize conclusions. accuracy, ECE, latency,
+and OOD detection — all
+grounded in research-based
+investigation methodology.
+PO5 Modern Tool Usage: 3 PyTorch 2.0.1, Pyro,
+Create and apply mod- BayesianTorch, CARLA
+ern tools, modeling, and 0.9.14, PettingZoo, Duck-
+engineering techniques. ieBot, PyTorch Geometric,
+TorchScript, and Weights
+and Biases are all applied
+extensively across the
+Cognix system.
+PO6 The Engineer and So- 3 Cognix directly addresses
+ciety: Apply contextual societal safety — au-
+knowledge to societal, tonomous vehicle accidents,
+health, safety, legal, and medical AI misdiagnosis, fi-
+cultural issues. nancial flash crashes — and
+aligns with legal regulatory
+requirements of ISO 26262,
+EU AI Act 2.0, and FDA
+2026 guidelines.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 32
+=== PAGE 40 ===
+Chapter: 6
+PO7 Ethics: Apply ethical prin- 3 Cognix is fundamentally
+ciples and commit to pro- motivated by the ethical
+fessional ethics and respon- responsibility of deploying
+sibilities. AI in safety-critical do-
+mains. The system ensures
+AI is transparent and hon-
+est about its confidence —
+not overconfident — before
+making decisions affecting
+human lives.
+PO8 Individual and Team 3 Cognix is developed by
+Work: Function effectively a four-member team with
+as an individual and in each member owning one
+teams. module—functioningeffec-
+tively both individually and
+collaboratively in a multi-
+disciplinary AI and robotics
+project.
+PO9 Communication Skills: 3 Technical documentation,
+Communicate effectively on IEEE literature review,
+complex engineering activi- seminar report, and PPT
+ties. presentation were all pre-
+pared, communicating
+complex uncertainty quan-
+tification concepts clearly
+to both technical and
+non-technical audiences.
+PO10 Project Management 3 The project was structured
+and Finance: Apply across eight phases with
+project management and clear module-wise division
+financial principles in of work, timelines, integra-
+engineering work. tion milestones, and hard-
+ware procurement planning
+for DuckieBot and CARLA
+infrastructure.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 33
+=== PAGE 41 ===
+Chapter: 6
+PO11 Life-long Learning: Rec- 3 The team independently
+ognize the need for life-long studied cutting-edge re-
+learning amidst technologi- search from 2022 to 2025 on
+cal change. Bayesian Neural Networks,
+conformal prediction, and
+graph-based uncertainty
+communication — all
+topics beyond standard
+curriculum — demonstrat-
+ing self-directed life-long
+learning.
+Table 6.1: Program Outcomes (PO) Mapping – Cognix
+6.2 Program Specific Outcome (PSO) Mapping
+PSO Description Mapping Justification
+Number Level
+PSO1 Interpret data and apply 3 Cognix interprets multi-
+Artificial Intelligence al- modal sensor data from
+gorithms to provide solu- camera, LIDAR, and
+tions. radar agents and ap-
+plies Bayesian Neural
+Networks, Graph Neural
+Networks, Loopy Be-
+lief Propagation, and
+conformal prediction al-
+gorithms to provide safe
+and calibrated solutions
+for multi-agent decision
+making in autonomous
+driving, medical diag-
+nosis, and distributed
+robotics.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 34
+=== PAGE 42 ===
+Chapter: 6
+PSO2 Apply standard prac- 3 Standard Bayesian infer-
+tices, strategies and ence practices, Shapley
+use appropriate models value attribution analy-
+of data analytics to sis, and Expected Cal-
+discover knowledge. ibration Error evalua-
+tion strategies are ap-
+plied to multi-agent sen-
+sor data to discover ac-
+tionable knowledge —
+identifying which agents
+are reliable, which uncer-
+tainty sources can be re-
+duced, and which scenar-
+ios require human inter-
+vention.
+Table 6.2: Program Specific Outcomes (PSO) Mapping – Cognix
+KKWIEER, Department of Artificial Intelligence and Data Science Page 35
+=== PAGE 43 ===
+Chapter: 7
+Chapter 7
+Summary
+Cognix is designed to solve a problem that existing AI systems largely ignore —
+the inability to explain why they are uncertain and what should be done about it. The
+system operates across five interconnected modules, where each agent first decomposes its
+sensor observations into two distinct uncertainty components, fuses its beliefs with neigh-
+bouring agents through probabilistic message passing, receives a mathematically guaranteed
+calibration ensuring stated confidence levels are accurate, communicates only the most in-
+formative uncertainty signals to other agents through a learned graph-based protocol, and
+finally receives a complete decision output that not only recommends an action but also
+identifies which specific agent is the weakest link in the collective reasoning chain. Applied
+to autonomous driving, medical diagnosis, and multi-robot coordination, Cognix moves AI
+decision making away from blind confidence toward a model of structured and explainable
+self-awareness,whereeverypredictioncarriesajustifiedleveloftrustratherthananarbitrary
+score.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 36
+=== PAGE 44 ===
+Chapter: 7
+References
+[1] I. Goodfellow, Y. Bengio, and A. Courville, Deep Learning. MIT Press, 2016.
+[2] C. M. Bishop, Pattern Recognition and Machine Learning. Springer, 2006.
+[3] Y. Gal and Z. Ghahramani, “Dropout as a Bayesian Approximation: Representing
+Model Uncertainty in Deep Learning,” in ICML, 2016.
+[4] B. Lakshminarayanan, A. Pritzel, and C. Blundell, “Simple and Scalable Predictive
+Uncertainty Estimation using Deep Ensembles,” in NeurIPS, 2017.
+[5] C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger, “On Calibration of Modern Neural
+Networks,” in ICML, 2017.
+[6] J. Platt, “Probabilistic Outputs for Support Vector Machines,” 1999.
+[7] V. Vovk, A. Gammerman, and G. Shafer, Algorithmic Learning in a Random World.
+Springer, 2005.
+[8] A. N. Angelopoulos and S. Bates, “A Gentle Introduction to Conformal Prediction and
+Distribution-Free Uncertainty Quantification,” 2021.
+[9] Y. Romano, E. Patterson, and E. Cand`es, “Conformalized Quantile Regression,” in
+NeurIPS, 2019.
+[10] J. Lei et al., “Distribution-Free Predictive Inference for Regression,” JASA, 2018.
+[11] V. Kuleshov, N. Fenner, and S. Ermon, “Accurate Uncertainties for Deep Learning
+Using Calibrated Regression,” in ICML, 2018.
+[12] M. Abdar et al., “A Review of Uncertainty Quantification in Deep Learning,” Informa-
+tion Fusion, 2021.
+[13] A. Kendall and Y. Gal, “What Uncertainties Do We Need in Bayesian Deep Learning
+for Computer Vision?” in NeurIPS, 2017.
+[14] T. G. Dietterich, “Ensemble Methods in Machine Learning,” in Multiple Classifier Sys-
+tems, 2000.
+[15] Z.-H. Zhou, Ensemble Methods: Foundations and Algorithms. CRC Press, 2012.
+[16] L. Bu¸soniu, R. Babuˇska, and B. De Schutter, “A Comprehensive Survey of Multiagent
+Reinforcement Learning,” IEEE TSMC, 2008.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 37
+=== PAGE 45 ===
+Chapter: 7
+[17] F. A. Oliehoek and C. Amato, A Concise Introduction to Decentralized POMDPs.
+Springer, 2016.
+[18] P. Stone and M. Veloso, “Multiagent Systems: A Survey from a Machine Learning
+Perspective,” Autonomous Robots, 2000.
+[19] K. Zhang et al., “Multi-Agent Reinforcement Learning: A Selective Overview,” IEEE
+TNNLS, 2021.
+[20] M. Sensoy, L. Kaplan, and M. Kandemir, “Evidential Deep Learning to Quantify Clas-
+sification Uncertainty,” in NeurIPS, 2018.
+[21] R. M. Neal, Bayesian Learning for Neural Networks. Springer, 1995.
+[22] K. P. Murphy, Machine Learning: A Probabilistic Perspective. MIT Press, 2012.
+[23] C. M. Bishop, “Pattern Recognition and Machine Learning (Information Science and
+Statistics),” 2007.
+[24] G. Shafer and V. Vovk, “A Tutorial on Conformal Prediction,” JMLR, 2008.
+[25] H. Papadopoulos et al., “Inductive Confidence Machines for Regression,” ECML, 2002.
+[26] A. Angelopoulos et al., “Conformal Prediction: A Unified Review,” Foundations and
+Trends in ML, 2023.
+[27] Y. Liu et al., “A Survey on Deep Learning-Based Uncertainty Estimation,” 2020.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 38

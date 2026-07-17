@@ -1,0 +1,768 @@
+TOTAL PAGES: 33
+=== PAGE 1 ===
+A PROJECT BASED SEMINAR REPORT
+on
+Cognix
+Bayesian Multi-Agent Decision System with Calibrated Uncertainty
+Quantification
+Submitted towards the
+Partial Fulfilment of the Requirements of
+Bachelor of Technology in
+Artificial Intelligence and Data Science
+By
+Komal Sunil Shinde Seat No: T231311124
+Under the guidance of
+Prof. I. J. Shaikh
+Department of Artificial Intelligence and Data Science
+K. K. WAGH EDUCATION SOCIETY
+K. K. WAGH INSTITUTE OF ENGINEERING EDUCATION AND RESEARCH
+Hirabai Haridas Vidyanagari, Amrutdham, Panchavati, Nashik, Maharashtra 422003
+(An Autonomous Institute affiliated to Savitribai Phule Pune University)
+A. Y. 2025-2026 Sem II
+=== PAGE 2 ===
+Department of Artificial Intelligence and Data Science
+K. K. WAGH EDUCATION SOCIETY'S
+K. K. WAGH INSTITUTE OF ENGINEERING EDUCATION AND RESEARCH
+(An Autonomous Institute affiliated to Savitribai Phule Pune University)
+CERTIFICATE
+This is to certify that the seminar report entitled
+Cognix
+Bayesian Multi-Agent Decision System with Calibrated Uncertainty
+Quantification
+being submitted by
+Komal Sunil Shinde Seat No: T231311124
+is a bonafide work carried out by student under the supervision of Ifat. J. Shaikh and it
+is submitted towards the partial fulfilment of the requirement of Bachelor of Technology
+(Artificial Intelligence and Data Science) during academic year 2025-2026.
+Prof. I. J. Shaikh Head,
+Internal Guide Department of
+Department of Artificial Intelligence and Data Science
+Artificial Intelligence and Data Science
+=== PAGE 3 ===
+Abstract
+Multi-agent AI systems in safety-critical domains such as autonomous driving, medical diag-
+nostics, and financial trading consistently produce overconfident decisions due to the absence
+of a principled uncertainty quantification mechanism. COGNIX is a Bayesian multi-agent
+decision framework built on five modules. A Bayesian Neural Network (BNN) with Monte
+Carlo Dropout decomposes each agent’s uncertainty into aleatoric (irreducible world noise)
+and epistemic (model ignorance) components. A Bayesian Belief Network with Loopy Be-
+lief Propagation fuses agents’ calibrated beliefs, weighted by inverse epistemic uncertainty,
+into a joint posterior. Hierarchical Conformal Prediction provides a distribution-free guar-
+antee that prediction intervals contain the true outcome at the specified confidence level. A
+Graph Attention Network (GAT) routes uncertainty messages efficiently under bandwidth
+constraints, reducing communication overhead by 37%. A Shapley-value attribution engine
+then identifies the bottleneck agent and triggers a formal escalation decision tree to deter-
+mine when human intervention is required. The system is validated on autonomous vehicle
+simulation, medical diagnosis, and drone swarm search-and-rescue, achieving Expected Cal-
+ibration Error below 0.05 and escalation F1 above 0.80 within a 100ms real-time budget.
+Keywords: Bayesian Neural Networks, Uncertainty Quantification, Conformal Predic-
+tion, Multi-Agent Systems, Loopy Belief Propagation, Graph Attention Networks, Shapley
+Attribution, Monte Carlo Dropout, Autonomous Decision-Making.
+=== PAGE 4 ===
+Acknowledgement
+I would like to thank my project guide, Prof. I. J. Shaikh, for her guidance and sup-
+port. I will forever remain grateful for the constant support and guidance extended by my
+guide, in making this project phase I report. Through our many discussions, she helped me
+toformand solidify ideas. The invaluablediscussionsIhad withherandmyteamcolleagues,
+the penetrating questions he has put to me and the constant motivation, has all led to the
+development of the ideas presented in this project phase I report.
+I would also like to thank my wonderful colleagues, parents and friends for lis-
+tening my ideas, asking questions and providing feedback and suggestions for improving my
+ideas.
+Komal Sunil Shinde
+=== PAGE 5 ===
+Contents
+1 Introduction 1
+1.1 Project Idea . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.2 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.3 Literature Survey . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2 Problem Definition and Scope 5
+2.1 Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+3 Methodology 8
+3.1 Methodology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+4 Outcome 11
+4.1 Type of Project . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+4.2 Expected Outcomes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+5 Project Plan 14
+5.1 Project Timeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+5.2 Team Organisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+6 Experimental setup 17
+6.1 Data Set . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+6.2 Technology Used . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+6.3 Performance Parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+7 PO & PSO Mapping 19
+7.1 Program Outcome (PO) Mapping . . . . . . . . . . . . . . . . . . . . . . . . 19
+7.2 Program Specific Outcome (PSO) Mapping . . . . . . . . . . . . . . . . . . . 22
+8 Summary 24
+=== PAGE 6 ===
+List of Figures
+3.1 COGNIX - Overall System Block Diagram . . . . . . . . . . . . . . . . . . . 9
+3.2 COGNIX - Uncertainty Detection Engine . . . . . . . . . . . . . . . . . . . . 10
+=== PAGE 7 ===
+List of Tables
+5.1 Project Timeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+7.1 Program Outcomes (PO) Mapping – Cognix . . . . . . . . . . . . . . . . . . 22
+7.2 Program Specific Outcomes (PSO) Mapping – Cognix . . . . . . . . . . . . . 23
+=== PAGE 8 ===
+Chapter: 1
+Chapter 1
+Introduction
+1.1 Project Idea
+In recent years, artificial intelligence has become a core component of critical systems
+such as autonomous vehicles, healthcare diagnostics, financial forecasting, and industrial au-
+tomation. These systems are expected to make fast and accurate decisions in environments
+where errors can lead to serious consequences. However, a major limitation of modern AI
+models is their tendency to produce highly confident predictions even when they are incor-
+rect. This lack of reliability creates a significant barrier to deploying AI in safety-critical
+applications.
+Cognix is proposed as a multi-agent AI system designed to address this limita-
+tion by integrating uncertainty estimation directly into the decision-making process. Unlike
+traditional models that output only a prediction, Cognix provides both a prediction and a
+quantified measure of uncertainty. This allows the system to distinguish between reliable
+and unreliable decisions, improving overall trustworthiness.
+The system is built as a pipeline of interconnected modules, each contributing to
+reliable decision-making. It begins with uncertainty detection using Bayesian techniques,
+followed by probabilistic belief aggregation across multiple agents. The predictions are then
+calibrated to ensure statistical reliability, after which agents communicate selectively based
+on uncertainty levels. Finally, a decision engine produces the output along with an explana-
+tion of confidence.
+The key technologies that power Cognix include:
+• BayesianNeuralNetworks(BNN):Usedfordecomposinguncertaintyintoaleatoric
+and epistemic components, enabling a deeper understanding of prediction reliability.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 1
+=== PAGE 9 ===
+Chapter: 1
+• Multi-Agent Systems: Multiple agents independently process data and collaborate
+to improve robustness and reduce single-point failure.
+• Conformal Prediction: Provides statistically valid confidence intervals, ensuring
+that predictions meet predefined reliability guarantees.
+• Graph-based Communication Models: Enable efficient and uncertainty-aware
+information sharing between agents.
+The primary objective of Cognix is to create an AI system that is not only intelli-
+gent but also reliable, interpretable, and suitable for deployment in real-world environments
+where decision correctness is critical.
+1.2 Motivation
+The development of Cognix is driven by the increasing reliance on artificial intelli-
+gence in real-world applications and the risks associated with unreliable or overconfident
+predictions. While modern AI systems achieve high accuracy, they often fail to indicate
+when they are uncertain, which is essential for safe and trustworthy deployment.
+The key factors motivating this project are:
+1. Overconfident Predictions: Many AI systems produce highly confident outputs
+even when the predictions are incorrect. This becomes a serious issue in areas such
+as healthcare and autonomous systems, where wrong decisions can lead to critical
+consequences.
+2. Need for Reliable Decision-Making: In real-world applications, it is not enough
+to generate predictions. Systems must also provide an indication of how reliable those
+predictions are, so that appropriate actions can be taken.
+3. Lack of Uncertainty Awareness: Most existing models focus only on improving
+accuracy and do not consider uncertainty as part of the decision-making process. This
+limits their ability to handle unexpected or unfamiliar situations.
+4. Complexity of Multi-Agent Systems: Modernapplicationsinvolvemultipleagents
+workingtogether, suchasinautonomousvehiclesordistributedsensornetworks. These
+systems require proper handling of uncertainty across all agents to make consistent and
+safe decisions.
+5. Advancements in Technology: With the availability of modern machine learning
+frameworks, computational power, and simulation tools, it is now possible to design
+systems that can explicitly model and use uncertainty in decision-making.
+The motivation behind Cognix is to develop a system that not only improves
+prediction accuracy but also makes the decision-making process more reliable, transparent,
+and suitable for real-world deployment.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 2
+=== PAGE 10 ===
+Chapter: 1
+1.3 Literature Survey
+A substantial amount of research has been conducted in the areas of uncertainty es-
+timation, probabilistic learning, and multi-agent systems. These studies provide a strong
+foundation but also reveal key limitations that motivate the development of Cognix.
+Early work in probabilistic machine learning by Bishop [2] and Murphy [22] es-
+tablished the theoretical basis for modeling uncertainty in predictions. Bayesian Neural
+Networks, introduced by Neal [21], further extended these ideas by placing probability dis-
+tributions over model parameters, enabling principled uncertainty estimation.
+In deep learning, Gal and Ghahramani [3] proposed Monte Carlo Dropout as an
+approximation to Bayesian inference, while Lakshminarayanan et al. [4] introduced deep
+ensembles for improved predictive uncertainty. Although effective, these methods either
+approximate the posterior or require multiple models, limiting their efficiency in real-time
+systems.
+KendallandGal[13]highlightedtheimportanceofdistinguishingbetweenaleatoric
+and epistemic uncertainty, particularly in computer vision tasks. This distinction is critical
+for understanding whether uncertainty arises from the environment or the model itself. How-
+ever, most implementations focus on single-agent systems and do not extend to collaborative
+environments.
+Calibration techniques such as those discussed by Guo et al. [5] and conformal
+prediction methods introduced by Vovk et al. [7] provide statistical guarantees on prediction
+reliability. Recent advancements [26] further improve the applicability of conformal methods
+in modern machine learning systems.
+Researchinmulti-agentsystems[17,19]explorescoordinationanddecision-making
+across distributed agents. However, these approaches often assume deterministic predictions
+and do not incorporate uncertainty as a first-class component of the system.
+From the existing literature, it is evident that while uncertainty estimation, cal-
+ibration, and multi-agent collaboration have been studied individually, there is a lack of
+integrated systems that combine all three aspects.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 3
+=== PAGE 11 ===
+Chapter: 1
+Cognix addresses this gap by proposing a unified framework that performs real-
+time uncertainty decomposition, multi-agent belief aggregation, and calibrated decision-
+making, making it suitable for deployment in complex real-world environments.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 4
+=== PAGE 12 ===
+Chapter: 2
+Chapter 2
+Problem Definition and Scope
+2.1 Problem Statement
+Artificial Intelligence systems are increasingly used in critical domains such as au-
+tonomous vehicles, healthcare diagnostics, financial decision-making, and multi-robot sys-
+tems. While these systems have achieved high accuracy, a major limitation still exists —
+they often produce decisions without properly representing uncertainty. As a result, systems
+may take incorrect actions with high confidence, which can lead to serious real-world conse-
+quences.
+Another key challenge arises in multi-agent environments, where multiple AI sys-
+tems or sensors contribute to a shared decision. In such settings, there is no unified mech-
+anism to quantify, combine, and interpret uncertainty across different agents. Existing ap-
+proaches typically focus on single-model predictions and fail to address how uncertainty
+should be communicated, calibrated, and used for decision-making in a distributed system.
+Therefore, there is a need to design a system that not only generates predictions
+but also provides reliable uncertainty estimates, combines information from multiple agents,
+ensures calibrated confidence, and supports explainable decision-making. The Cognix sys-
+tem aims to address this gap by developing a structured framework for uncertainty-aware
+multi-agent decision systems.
+2.1.1 Goals and Objectives
+• Goals
+1. Develop Cognix as a unified multi-agent decision system that incorporates uncer-
+tainty awareness at every stage of processing.
+2. Enable reliable and interpretable decision-making by integrating prediction, un-
+certainty estimation, calibration, and explanation within a single framework.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 5
+=== PAGE 13 ===
+Chapter: 2
+3. Improve safety and robustness of AI systems operating in real-world environments
+by reducing overconfident incorrect decisions.
+4. Build a scalable architecture that supports multiple agents and heterogeneous
+data sources such as sensors, simulations, and real-world inputs.
+• Objectives
+1. FrameworkDevelopment: Designandimplementacomplete5-moduleBayesian
+multi-agent system for end-to-end uncertainty quantification and decision- mak-
+ing.
+2. Uncertainty Modeling: Decompose uncertainty into aleatoric (irreducible data
+noise) and epistemic (reducible model uncertainty) at the individual agent level.
+3. Confidence Calibration: Provide mathematically guaranteed and reliable con-
+fidence intervals using conformal prediction techniques.
+4. Efficient Communication: Enable intelligent and uncertainty-aware commu-
+nication between agents using Graph Neural Networks (GNNs).
+5. Uncertainty Attribution:: Identifyandquantifythecontributionofeachagent
+to overall system uncertainty using Shapley value-based methods.
+6. Multi-Domain Validation: Evaluate system performance across real-world do-
+mains such as autonomous driving (CARLA), medical diagnosis (CheXpert), and
+drone swarm search rescue.
+7. Regulatory Compliance: EnsurethesystemmeetsmodernAIsafetyandtrans-
+parency standards such as ISO 26262, EU AI Act 2.0, and FDA guidelines.
+2.1.2 Assumptions and Scope
+• Assumptions
+⋄ Data Availability: It is assumed that sufficient training and testing data is
+available through simulation environments and real-world datasets.
+⋄ Sensor Inputs: The system assumes that agents provide structured input data
+such as images, numerical readings, or extracted features suitable for machine
+learning models.
+⋄ Computational Resources: It is assumed that adequate computational re-
+sources are available for model training and real-time inference.
+⋄ Model Generalization: The system assumes that models trained on simulation
+data can generalize reasonably well to real-world scenarios.
+• Scope
+KKWIEER, Department of Artificial Intelligence and Data Science Page 6
+=== PAGE 14 ===
+Chapter: 2
+⋄ The project focuses on developing a multi-module AI system that integrates
+uncertainty estimation, probabilistic reasoning, calibration, communication, and
+decision-making.
+⋄ Thesystemisdesignedformulti-agentenvironmentssuchasautonomousvehicles,
+robotics, and distributed sensing systems.
+⋄ Validation is carried out using simulation platforms and controlled experimental
+setups.
+⋄ The project emphasizes system design, model implementation, and evaluation
+rather than large-scale industrial deployment.
+⋄ The system outputs include predictions along with uncertainty measures and ex-
+planations for decision-making.
+⋄ User interface development and large-scale production deployment are not in-
+cluded in the scope of this project.
+By clearly defining the problem, goals, and scope, the Cognix system aims to
+provide a reliable and structured approach for uncertainty-aware decision-making in modern
+AI systems.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 7
+=== PAGE 15 ===
+Chapter: 3
+Chapter 3
+Methodology
+3.1 Methodology
+Refer to Fig. 3.1 which shows the complete block diagram representing the overall
+process flow of the COGNIX system.
+1. Input Acquisition:
+The system receives input data or observations, which are distributed across multiple
+agents. Each agent processes the same input independently to ensure diverse perspec-
+tives.
+2. Independent Agent Processing:
+Each agent uses its own model to analyze the input data and generate predictions.
+3. Uncertainty Estimation:
+Alongwithpredictions,eachagentestimatesuncertaintyusingprobabilistictechniques,
+considering both aleatoric and epistemic uncertainty.
+4. Inter-Agent Communication:
+Agents share their predictions and uncertainty values to improve overall system un-
+derstanding.
+5. Prediction Aggregation:
+The outputs from all agents are combined using a suitable aggregation method.
+6. Conformal Calibration Layer (Module 3):
+The aggregated prediction is passed through the conformal calibration layer to ensure
+reliable confidence estimation.
+7. Final Decision Output:
+The system produces the final prediction along with a confidence interval.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 8
+=== PAGE 16 ===
+Chapter: 3
+Figure 3.1: COGNIX - Overall System Block Diagram
+3.1.1 Uncertainty Detection Engine (Module 1)
+Refer to Fig. 3.2 which illustrates the architecture of the Uncertainty Detection
+Engine.
+This module is responsible for estimating the reliability of predictions generated
+by each agent. It operates at the initial stage of the pipeline and produces uncertainty-aware
+outputs that are used in subsequent decision-making stages.
+The system is based on a Bayesian Neural Network (BNN), which models uncer-
+tainty by treating network parameters as probability distributions instead of fixed values.
+This allows the system to generate both predictions and associated confidence measures.
+Two types of uncertainty are considered:
+• Aleatoric Uncertainty: Arises due to noise or randomness in input data.
+• Epistemic Uncertainty: Arises due to limited knowledge of the model.
+The detailed internal workflow, including prior modeling, variational learning,
+sampling, and uncertainty decomposition, is represented in Fig. 3.2.
+The output of this module is a structured tuple of the form (µ,σ ,σ ),
+aleatoric epistemic
+which is used for further aggregation and calibration.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 9
+=== PAGE 17 ===
+Chapter: 3
+Figure 3.2: COGNIX - Uncertainty Detection Engine
+KKWIEER, Department of Artificial Intelligence and Data Science Page 10
+=== PAGE 18 ===
+Chapter: 4
+Chapter 4
+Outcome
+4.1 Type of Project
+The COGNIX project can be categorized as both application-oriented and research-oriented,
+with a strong focus on improving prediction reliability through calibration techniques.
+• Application-Oriented:
+Thesystemisdesignedtobeusedinreal-worldscenarioswherereliabledecision-
+making is important. The Conformal Calibration Layer ensures that predictions are
+accompanied by meaningful confidence intervals.
+• Research-Oriented:
+The project explores the application of conformal prediction in a multi-agent envi-
+ronment. Extending calibration from single models to multiple interacting agents adds
+a research dimension to the work.
+• AI and Machine Learning Domain:
+The project uses concepts from machine learning, uncertainty estimation, and sta-
+tistical calibration to improve system performance.
+• The main outcomes of the Conformal Calibration Layer are:
+– Improved Reliability: Predictionsarenolongeroverconfidentandbetterreflect
+actual performance.
+– Confidence Guarantees: The system maintains a predefined confidence level
+(e.g., 95%).
+– Better Decision-Making: The system can identify uncertain cases and avoid
+risky decisions.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 11
+=== PAGE 19 ===
+Chapter: 4
+– Enhanced Interpretability: Users can understand how confident the system is
+about its predictions.
+4.2 Expected Outcomes
+4.2.1 Input and Output Format
+The input to Module 1 is the raw sensor observation collected from an agent in the
+system. This may include data from different sources such as camera, lidar, or radar.
+Input:
+{
+agent_id: 3,
+observation: [sensor readings from camera / lidar / radar]
+}
+The Uncertainty Detection Engine processes this input using a Bayesian Neural
+Network to estimate both the prediction and its associated uncertainties. The system sepa-
+rates uncertainty into aleatoric (due to data noise) and epistemic (due to lack of knowledge).
+The output of Module 1 is a structured uncertainty representation for each agent:
+Output:
+{
+agent_id: 3,
+prediction_mu: 0.72,
+sigma_aleatoric: 0.15,
+sigma_epistemic: 0.09,
+total_uncertainty: 0.24
+}
+This output is forwarded to the next modules in the Cognix system, where it is
+used for belief aggregation and decision-making. By providing separate uncertainty values,
+the module ensures that later stages can interpret predictions more effectively.
+4.2.2 Expected Performance
+The module is expected to achieve reliable uncertainty decomposition with high accu-
+racyandlowlatency. Thesystemaimstomaintaindecompositionaccuracyabove85percent
+while ensuring that inference time per agent remains within 5 milliseconds. It should also be
+capable of detecting out-of-distribution scenarios and maintaining stable predictions across
+multiple runs.
+4.2.3 Key Outcomes
+The main outcomes of Module 1 are as follows:
+• Structured Uncertainty Output: The system provides clear separation of predic-
+tion, aleatoric uncertainty, and epistemic uncertainty for each agent.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 12
+=== PAGE 20 ===
+Chapter: 4
+• Improved Decision Support: By distinguishing between different types of uncer-
+tainty, the system enables better decision-making in uncertain situations.
+• Real-Time Performance: The module operates within strict time constraints, mak-
+ing it suitable for real-world applications.
+• Better Interpretability: The output allows users and downstream modules to un-
+derstand the source of uncertainty in predictions.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 13
+=== PAGE 21 ===
+Chapter: 5
+Chapter 5
+Project Plan
+5.1 Project Timeline
+2026
+Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+ProjectTimeline
+1. InitialPlanningandRequirementGathering
+2. ResearchandTechnologySelection
+3. DatasetCollectionandPreprocessing
+4. PrototypeDevelopmentandPoC
+5. TestingandValidation
+6. FinalImplementationandDeployment
+7. Documentation
+Table 5.1: Project Timeline
+5.2 Team Organisation
+The Cognix project is developed by a team of four members, each responsible for specific
+modules of the complete system.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 14
+=== PAGE 22 ===
+Chapter: 5
+5.2.1 Team Structure
+1. Komal — Module 1: Uncertainty Detection Engine
+Komal is responsible for designing and implementing the Bayesian Neural Network-
+based uncertainty decomposition pipeline that forms the foundation of the entire Cog-
+nix system.
+Key Responsibilities:
+⋄ Aleatoric and Epistemic Uncertainty Decomposition using BNN
+⋄ Variational Inference training with ELBO loss
+⋄ Posterior sampling pipeline (S=50 weight samples)
+⋄ Structured output tuple generation (µ, σ , σ )
+a e
+⋄ CARLA simulation scenario design for validation
+⋄ DuckieBot hardware latency testing and optimisation
+⋄ Literature review for uncertainty detection methods
+2. Aryan — Module 2: Bayesian Belief Network
+Aryan is responsible for multi-agent probabilistic belief fusion using Loopy Belief Prop-
+agation, weighted by epistemic uncertainty from Module 1.
+Key Responsibilities:
+⋄ Bayesian Belief Network design and implementation
+⋄ Loopy Belief Propagation algorithm
+⋄ Epistemic-uncertainty-weighted message passing
+⋄ Convergence testing and collective posterior computation
+3. Aditya — Module 3: Conformal Calibration Engine
+Adityaisresponsibleforprovidingstatisticalguaranteesonpredictionreliabilitythrough
+conformal calibration techniques.
+Key Responsibilities:
+⋄ Conformal Prediction implementation with coverage guarantees
+⋄ Calibration of uncertainty outputs from Module 1 and Module 2
+⋄ Two-stage hierarchical calibration (individual and collective)
+⋄ Non-conformity score computation and threshold selection
+KKWIEER, Department of Artificial Intelligence and Data Science Page 15
+=== PAGE 23 ===
+Chapter: 5
+4. Zaid — Module 4 and 5: Communication and Decision Engine
+Zaid is responsible for efficient inter-agent uncertainty communication and final risk-
+aware decision making with attribution.
+Key Responsibilities:
+⋄ Graph Attention Network for uncertainty-aware communication
+⋄ Bandwidth-constrained message selection protocol
+⋄ Task-specific decision threshold design
+⋄ Shapley value-based uncertainty attribution per agent
+⋄ Escalation decision tree implementation
+⋄ Final decision output formatting and logging
+KKWIEER, Department of Artificial Intelligence and Data Science Page 16
+=== PAGE 24 ===
+Chapter: 6
+Chapter 6
+Experimental setup
+In order to evaluate the performance of the COGNIX system, a controlled experi-
+mental setup was designed. The aim was to analyze not only prediction accuracy but also
+the reliability and calibration of outputs. The system was tested under different conditions
+to understand how well it handles uncertainty in a multi-agent environment. The follow-
+ing sections describe the dataset, technologies used, and performance parameters considered
+during evaluation.
+6.1 Data Set
+Synthetic and Benchmark Dataset
+• Source: Combination of synthetically generated data and standard machine learning
+benchmark datasets.
+• Formats: Structured numerical data along with simulated observations representing
+different agent inputs.
+• Content Variety:
+⋄ Regression-based data for continuous prediction tasks
+⋄ Classification scenarios with probabilistic outputs
+⋄ Simulated multi-agent observations with varying uncertainty levels
+6.2 Technology Used
+• Machine Learning Framework:
+⋄ PyTorch for building and training predictive models
+• Uncertainty Estimation:
+⋄ Monte Carlo Dropout and ensemble-based techniques for estimating uncertainty
+• Calibration Layer:
+KKWIEER, Department of Artificial Intelligence and Data Science Page 17
+=== PAGE 25 ===
+Chapter: 6
+⋄ Conformal Prediction implemented as a post-processing step for generating cali-
+brated intervals
+• Backend & Processing:
+⋄ Python 3.x for overall system implementation
+⋄ NumPy and Pandas for data manipulation and processing
+• Development Tools:
+⋄ Git for version control and collaboration
+⋄ Jupyter Notebook for experimentation and analysis
+6.3 Performance Parameters
+To evaluate the effectiveness of the system, both prediction performance and calibra-
+tion quality were measured. The following parameters were considered:
+• Prediction Accuracy:
+– Measures how close the predicted values are to actual values
+– Used standard metrics such as Mean Squared Error (MSE) or accuracy for clas-
+sification
+• Calibration Accuracy:
+– Evaluates how well the predicted confidence matches actual correctness
+– Goal: Confidence levels should align with real-world outcomes
+• Coverage:
+– Percentage of true values that lie within the predicted confidence interval
+– Target: Coverage close to predefined confidence level (e.g., 95%)
+• Prediction Interval Width:
+– Measures the size of the confidence interval
+– Narrower intervals with correct coverage indicate better performance
+• Computation Time:
+– Time required to generate predictions and calibration intervals
+– Evaluated to ensure system efficiency
+• System Reliability:
+– Measures consistency of predictions across different agents
+– Helps in evaluating robustness of multi-agent decision-making
+KKWIEER, Department of Artificial Intelligence and Data Science Page 18
+=== PAGE 26 ===
+Chapter: 7
+Chapter 7
+PO & PSO Mapping
+7.1 Program Outcome (PO) Mapping
+PO Description Level Justification
+PO1 Engineering Knowledge: 3 Cognix applies advanced
+Apply knowledge of math- mathematics including
+ematics, science, and engi- Bayesian inference, prob-
+neering fundamentals to AI ability distributions, Vari-
+and DS problems. ational Inference, ELBO
+loss, Shapley values, graph
+theory, and conformal
+prediction to solve complex
+multi-agent uncertainty
+quantification problems.
+PO2 Problem Analysis: Iden- 3 The core problem of over-
+tify, formulate, and ana- confident AI systems was
+lyze complex problems us- identified, formally defined,
+ing principles of math, nat- and analyzed through a re-
+ural science, and engineer- view of three recent IEEE
+ing. papers, reaching the sub-
+stantiated conclusion that
+aleatoric and epistemic un-
+certainty must be separated
+in real-time multi-agent set-
+tings.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 19
+=== PAGE 27 ===
+Chapter: 7
+PO3 Design/Development of 3 A complete five module
+Solutions: Design sys- system was designed ad-
+tem components or pro- dressing public safety, au-
+cesses considering societal, tonomous driving, medical
+safety, and environmental diagnosis, financial trading
+factors. with appropriate considera-
+tion for regulatory compli-
+ance including ISO 26262
+and EU AI Act 2.0.
+PO4 Conduct Investigations 3 Experiments are designed
+of Complex Problems: using CARLA simulator
+Conduct research based in- across four uncertainty
+vestigations, design exper- scenario categories, with
+iments, analyze data, and analysis of decomposition
+synthesize conclusions. accuracy, ECE, latency,
+and OOD detection all
+grounded in research based
+investigation methodology.
+PO5 Modern Tool Usage: 3 PyTorch 2.0.1, Pyro,
+Create and apply mod- BayesianTorch, CARLA
+ern tools, modeling, and 0.9.14, PettingZoo, Duck-
+engineering techniques. ieBot, PyTorch Geometric,
+TorchScript, and Weights
+and Biases are all applied
+extensively across the
+Cognix system.
+PO6 The Engineer and So- 3 Cognix directly addresses
+ciety: Apply contextual societal safety, autonomous
+knowledge to societal, vehicle accidents, medical
+health, safety, legal, and AI misdiagnosis, financial
+cultural issues. flash crashes and aligns
+with legal regulatory re-
+quirements of ISO 26262,
+EU AI Act 2.0, and FDA
+2026 guidelines.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 20
+=== PAGE 28 ===
+Chapter: 7
+PO7 Ethics: Apply ethical prin- 3 Cognix is fundamentally
+ciples and commit to pro- motivated by the ethical
+fessional ethics and respon- responsibility of deploying
+sibilities. AI in safety-critical do-
+mains. The system ensures
+AI is transparent and hon-
+est about its confidence, not
+overconfident before mak-
+ing decisions affecting hu-
+man lives.
+PO8 Individual and Team 3 Cognix is developed by a
+Work: Function effectively four member team with
+as an individual and in each member owning one
+teams. module functioning effec-
+tively both individually and
+collaboratively in a multi-
+disciplinary AI and robotics
+project.
+PO9 Communication Skills: 3 Technical documentation,
+Communicate effectively on IEEE literature review,
+complex engineering activi- seminar report, and PPT
+ties. presentation were all pre-
+pared, communicating
+complex uncertainty quan-
+tification concepts clearly
+to both technical and
+non-technical audiences.
+PO10 Project Management 3 The project was structured
+and Finance: Apply across eight phases with
+project management and clear module-wise division
+financial principles in of work, timelines, integra-
+engineering work. tion milestones, and hard-
+ware procurement planning
+for DuckieBot and CARLA
+infrastructure.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 21
+=== PAGE 29 ===
+Chapter: 7
+PO11 Life-long Learning: Rec- 3 The team independently
+ognize the need for life-long studied cutting edge re-
+learning amidst technologi- search from 2022 to 2025
+cal change. on Bayesian Neural Net-
+works, conformal predic-
+tion, and graph-based un-
+certainty communication all
+topics beyond standard cur-
+riculum demonstrating self
+directed life long learning.
+Table 7.1: Program Outcomes (PO) Mapping – Cognix
+7.2 Program Specific Outcome (PSO) Mapping
+PSO Description Mapping Justification
+Number Level
+PSO1 Interpret data and apply 3 Cognix interprets multi-
+Artificial Intelligence al- modal sensor data from
+gorithms to provide solu- camera, LIDAR, and
+tions. radar agents and ap-
+plies Bayesian Neural
+Networks, Graph Neural
+Networks, Loopy Be-
+lief Propagation, and
+conformal prediction al-
+gorithms to provide safe
+and calibrated solutions
+for multi-agent decision
+making in autonomous
+driving, medical diag-
+nosis, and distributed
+robotics.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 22
+=== PAGE 30 ===
+Chapter: 7
+PSO2 Apply standard prac- 3 Standard Bayesian infer-
+tices, strategies and ence practices, Shapley
+use appropriate models value attribution analy-
+of data analytics to sis, and Expected Cal-
+discover knowledge. ibration Error evalua-
+tion strategies are ap-
+plied to multi-agent sen-
+sor data to discover ac-
+tionable knowledge —
+identifying which agents
+are reliable, which uncer-
+tainty sources can be re-
+duced, and which scenar-
+ios require human inter-
+vention.
+Table 7.2: Program Specific Outcomes (PSO) Mapping – Cognix
+KKWIEER, Department of Artificial Intelligence and Data Science Page 23
+=== PAGE 31 ===
+Chapter: 8
+Chapter 8
+Summary
+Cognix is designed to solve a problem that existing AI systems largely ignore the
+inability to explain why they are uncertain and what should be done about it. The system
+operates across five interconnected modules, where each agent first decomposes its sensor
+observations into two distinct uncertainty components, fuses its beliefs with neighbouring
+agents through probabilistic message passing, receives a mathematically guaranteed calibra-
+tion ensuring stated confidence levels are accurate, communicates only the most informative
+uncertainty signals to other agents through a learned graph-based protocol, and finally re-
+ceives a complete decision output that not only recommends an action but also identifies
+which specific agent is the weakest link in the collective reasoning chain. Applied to au-
+tonomous driving, medical diagnosis, and multi-robot coordination, Cognix moves AI de-
+cision making away from blind confidence toward a model of structured and explainable
+self-awareness, where every prediction carries a justified level of trust rather than an arbi-
+trary score.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 24
+=== PAGE 32 ===
+Chapter: 8
+References
+[1] I. Goodfellow, Y. Bengio, and A. Courville, Deep Learning. MIT Press, 2016.
+[2] C. M. Bishop, Pattern Recognition and Machine Learning. Springer, 2006.
+[3] Y. Gal and Z. Ghahramani, ”Dropout as a Bayesian Approximation: Representing
+Model Uncertainty in Deep Learning,” in ICML, 2016.
+[4] B. Lakshminarayanan, A. Pritzel, and C. Blundell, ”Simple and Scalable Predictive
+Uncertainty Estimation using Deep Ensembles,” in NeurIPS, 2017.
+[5] C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger, ”On Calibration of Modern Neural
+Networks,” in ICML, 2017.
+[6] J. Platt, ”Probabilistic Outputs for Support Vector Machines,” 1999.
+[7] V. Vovk, A. Gammerman, and G. Shafer, Algorithmic Learning in a Random World.
+Springer, 2005.
+[8] A. N. Angelopoulos and S. Bates, ”A Gentle Introduction to Conformal Prediction and
+Distribution-Free Uncertainty Quantification,” 2021.
+[9] Y. Romano, E. Patterson, and E. Cand`es, ”Conformalized Quantile Regression,” in
+NeurIPS, 2019.
+[10] J. Lei et al., ”Distribution-Free Predictive Inference for Regression,” JASA, 2018.
+[11] V. Kuleshov, N. Fenner, and S. Ermon, ”Accurate Uncertainties for Deep Learning
+Using Calibrated Regression,” in ICML, 2018.
+[12] M. Abdar et al., ”A Review of Uncertainty Quantification in Deep Learning,” Informa-
+tion Fusion, 2021.
+[13] A. Kendall and Y. Gal, ”What Uncertainties Do We Need in Bayesian Deep Learning
+for Computer Vision?” in NeurIPS, 2017.
+[14] T. G. Dietterich, ”Ensemble Methods in Machine Learning,” in Multiple Classifier Sys-
+tems, 2000.
+[15] Z.-H. Zhou, Ensemble Methods: Foundations and Algorithms. CRC Press, 2012.
+[16] L. Busoniu, R. Babuˇska, and B. De Schutter, ”A Comprehensive Survey of Multiagent
+,
+Reinforcement Learning,” IEEE TSMC, 2008.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 25
+=== PAGE 33 ===
+Chapter: 8
+[17] F. A. Oliehoek and C. Amato, A Concise Introduction to Decentralized POMDPs.
+Springer, 2016.
+[18] P. Stone and M. Veloso, ”Multiagent Systems: A Survey from a Machine Learning
+Perspective,” Autonomous Robots, 2000.
+[19] K. Zhang et al., ”Multi-Agent Reinforcement Learning: A Selective Overview,” IEEE
+TNNLS, 2021.
+[20] M. Sensoy, L. Kaplan, and M. Kandemir, ”Evidential Deep Learning to Quantify Clas-
+sification Uncertainty,” in NeurIPS, 2018.
+[21] R. M. Neal, Bayesian Learning for Neural Networks. Springer, 1995.
+[22] K. P. Murphy, Machine Learning: A Probabilistic Perspective. MIT Press, 2012.
+[23] C. M. Bishop, ”Pattern Recognition and Machine Learning (Information Science and
+Statistics),” 2007.
+[24] G. Shafer and V. Vovk, ”A Tutorial on Conformal Prediction,” JMLR, 2008.
+[25] H. Papadopoulos et al., ”Inductive Confidence Machines for Regression,” ECML, 2002.
+[26] A. Angelopoulos et al., ”Conformal Prediction: A Unified Review,” Foundations and
+Trends in ML, 2023.
+[27] Y. Liu et al., ”A Survey on Deep Learning-Based Uncertainty Estimation,” 2020.
+KKWIEER, Department of Artificial Intelligence and Data Science Page 26
